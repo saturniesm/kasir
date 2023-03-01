@@ -1,0 +1,45 @@
+# GET USER
+GET  http://localhost:8000/user/ HTTP/1.1
+Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJ1c2VybmFtZSI6InN5ZWxhIiwiZW1haWwiOiJjb2JhQGdtYWlsLmNvbSIsImlhdCI6MTY3NDk4NDIxNSwiZXhwIjoxNjc1MDcwNjE1fQ.QEex7MEzOXiLZK3rpMdtrHdQqytkpRRfb-m71S4tJ30
+### GET USER BY ID
+GET  http://localhost:8000/user/1 HTTP/1.1
+
+### INSERT USER
+POST http://localhost:8000/user/add HTTP/1.1
+Content-Type: application/json
+
+{
+    "nama_user": "saturniesm",
+    "role": "admin",
+    "username": "syela",
+    "email": "coba@gmail.com",
+    "password": "12345",
+    "confPassword": "12345"
+}
+
+
+### FIND USER BY KEYWORD
+POST http://localhost:8000/user/find HTTP/1.1
+Content-Type: application/json
+
+{
+    "keyword": "saturniesm"
+}
+
+
+### EDIT USER
+PUT http://localhost:8000/user/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nama_user": "saturniesm",
+    "role": "admin",
+    "username": "syela",
+    "email": "saturniesm@gmail.com",
+    "password": "23423432"
+}
+
+
+###DELETE USER
+DELETE  http://localhost:8000/user/1 HTTP/1.1

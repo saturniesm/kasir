@@ -1,0 +1,39 @@
+# GET MEJA
+GET  http://localhost:8000/meja/ HTTP/1.1
+
+
+### GET MEJA BY ID
+GET  http://localhost:8000/meja/1 HTTP/1.1
+
+
+### INSERT MEJA
+POST http://localhost:8000/meja/add HTTP/1.1
+Content-Type: application/json
+
+{
+    "nomor_meja":23,
+    "status":"tersedia"
+}
+
+
+### FIND MEJA BY KEYWORD
+POST http://localhost:8000/meja/find HTTP/1.1
+Content-Type: application/json
+
+{
+    "keyword": "tersedia"
+}
+
+
+### EDIT MEJA
+PUT http://localhost:8000/meja/1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nomor_meja":23,
+    "status":"tidak_tersedia"
+}
+
+
+###DELETE USER
+DELETE  http://localhost:8000/meja/1 HTTP/1.1

@@ -1,0 +1,41 @@
+# TODO belajar cara up file di sini
+
+# GET MENU
+GET  http://localhost:8000/menu/ HTTP/1.1
+
+
+### GET MENU BY ID
+GET  http://localhost:8000/menu/1 HTTP/1.1
+
+
+### INSERT MENU
+POST http://localhost:8000/menu/add HTTP/1.1
+Content-Type: application/json
+
+{
+    "nomor_MENU":23,
+    "status":"tersedia"
+}
+
+
+### FIND MENU BY KEYWORD
+POST http://localhost:8000/menu/find HTTP/1.1
+Content-Type: application/json
+
+{
+    "keyword": "tersedia"
+}
+
+
+### EDIT MENU
+PUT http://localhost:8000/menu/1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "nomor_MENU":23,
+    "status":"tidak_tersedia"
+}
+
+
+###DELETE USER
+DELETE  http://localhost:8000/menu/1 HTTP/1.1
