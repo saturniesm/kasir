@@ -1,6 +1,5 @@
 // load model for user table
 const userModel = require("../models/index").user;
-const user = require("../models/user");
 const argon2 = require("argon2");
 
 // load operation from Sequelize
@@ -61,11 +60,9 @@ exports.searchUser = async (request, response) => {
   });
 };
 
-// create function for add new user
+
 exports.addUser = async (request, response) => {
-  // prepare data from request
-  const { nama_user, role, username, email, password, confPassword } =
-    request.body;
+  const { nama_user, role, username, email, password, confPassword } = request.body;
   if (password !== confPassword)
     return response.status(400).json({
       msg: "Password dan Confirm Password tidak cocok",
@@ -89,7 +86,7 @@ exports.addUser = async (request, response) => {
       message: error.message,
     });
   }
-};
+}
 
 exports.updateUser = async (request, response) => {
   // prepare data that has been changed

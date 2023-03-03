@@ -11,17 +11,25 @@ const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
-    // ini adalah react hook for more detail nanti tak liatin di Notion
-    // React bekerja dengan ngerender element tiap kali ada perbedaan
-    // Nah biar lo typing tapi gak di render all the time, kita pakai useRef ini
     const userRef = useRef();
     const errRef = useRef();
 
-    
+    // TODO Cant i simply this? by simply create a function?
 
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
+
+    const [pwd, setPwd] = useState('');
+    const [validPwd, setValidPwd] = useState(false);
+    const [pwdFocus, setPwdFocus] = useState(false);
+
+    const [matchPwd, setMatchPwd] = useState('');
+    const [validMatch, setValidMatch] = useState(false);
+    const [matchFocus, setMatchFocus] = useState(false);
+
+    const [errMsg, setErrMsg] = useState('');
+    const [success, setSuccess] = useState(false);
     
     return (
     <div>Register</div>
