@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [3, 100],
         },
       },
-      role: DataTypes.ENUM("admin", "kasir", "manager"),
+      role: DataTypes.ENUM("admin", "kasir", "manager", "undefine"),
       username: {
         type: DataTypes.STRING,
         allowNull: false,
