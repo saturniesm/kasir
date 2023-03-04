@@ -61,4 +61,18 @@ exports.validateRequiredFields = (req, res, next) => {
 };
 
 
+exports.validateEmail = (req, res, next) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const email = req.body.email;
+
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      message: "Invalid email address",
+    });
+  }
+
+  next();
+};
+
+
 

@@ -1,12 +1,9 @@
 const userModel = require("../models/index").user;
 const argon2 = require("argon2");
-const jwt = require("jsonwebtoken");
-const { validatePassword, validateRequiredFields, checkDuplicates } = require('../middleware/validation');
-
-
+const { validatePassword, validateRequiredFields, checkDuplicates, validateEmail } = require('../middleware/validation');
+const {generateAccessToken, generateRefreshToken } = require('../middleware/token');
 
 // ROLE any user
-
 exports.register = async (request, response, next) => {
   try {
     const models = [userModel, userModel];
@@ -17,10 +14,11 @@ exports.register = async (request, response, next) => {
     checkDuplicates(models, fields)(request, response, () => {
       validateRequiredFields(request, response, () => {
         validatePassword(request, response, async () => {
-          const { nama_user, username, email, password } = request.body;
 
+          const { nama_user, username, email, password } = request.body;
           const hashPassword = await argon2.hash(password);
           const role = "undefined";
+
           const user = await userModel.create({
             nama_user,
             role,
@@ -29,15 +27,7 @@ exports.register = async (request, response, next) => {
             password: hashPassword,
           });
 
-          const accessToken = jwt.sign({
-            "userInfo" :{
-                "id_user": user.id_user,
-                "username": user.username,
-                "email": user.email,
-            }
-        }, process.env.ACCESS_TOKEN_SECRET,{
-            expiresIn: Date.now() + process.env.JWT_EXPIRATION
-        });
+          const accessToken = generateAccessToken(username, email, role);
 
           response.status(201).json({
             success: true,
@@ -58,66 +48,51 @@ exports.register = async (request, response, next) => {
   }
 };
 
-
+// ROLE any user
 exports.login = async (req, res) => {
-  
-    const {email, password} = req.body
-    if(!email || !password) return res.status(400).json({
-        'message': 'Email and Passsword are required'
-    })
-    try{
-        const user = await userModel.findOne({
-            where:{
-                email: req.body.email
-            }
+    try {
+        req.requiredFields = ['email', 'password'];
+        validateRequiredFields(req, res, async () => {
+            validateEmail(req, res, async () => {
+                const { email, password } = req.body;
+                const user = await userModel.findOne({ where: { email } });
+                
+                if (!user) {
+                    return res.status(401).json({ message: 'Email does not exist' });
+                }
+                
+                const match = await argon2.verify(user.password, password);
+                
+                if (!match) {
+                    return res.status(401).json({ message: 'Wrong password' });
+                }
+                
+                const { username, email: userEmail, role, id_user } = user;
+                const accessToken = generateAccessToken(username, userEmail, role);
+                const refreshToken = generateRefreshToken(username, userEmail, role, id_user);
+            
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    maxAge: 24 * 60 * 60 * 1000
+                });
+            
+                res.status(200).json({
+                    success: true,
+                    data: {
+                    username,
+                    email: userEmail,
+                    token: accessToken
+                    },
+                    message: 'Login Berhasil'
+                });
+            });
         });
-        const match = await argon2.verify(user.password, req.body.password);
-        if(match) {
-            const username = user.username;
-            const email = user.email;
-            const role = user.role  
-            const accessToken = jwt.sign({
-                "userInfo" :{
-                    "username": username,
-                    "email": email,
-                    "role": role
-                }
-            }, process.env.ACCESS_TOKEN_SECRET,{
-                expiresIn: Date.now() + process.env.JWT_EXPIRATION
-            });
-
-            const refreshToken = jwt.sign({
-                username, 
-                email,
-                role
-            }, process.env.REFRESH_TOKEN_SECRET,{
-                expiresIn: Date.now() + process.env.JWT_REFRESH_EXPIRATION
-            });
-
-            await userModel.update({refresh_token: refreshToken},{
-                where:{
-                    id_user: user.id_user
-                }
-            });
-
-            res.cookie('refreshToken', refreshToken,{
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            });
-            res.json({ accessToken });
-        }else{
-            res.status(401).json({
-                'message': 'Wrong password'
-            })
-        }     
-    }catch (error){
-        res.status(404).json({
-            'message': 'Email does not exist'
-        })
-        console.log(error)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-};
-
+ };
+  
 exports.logout = async (request, response) => {
   const refreshToken = request.cookies.refreshToken;
   if(!refreshToken) return response.sendStatus(204);
@@ -139,4 +114,5 @@ exports.logout = async (request, response) => {
       'message': 'Logout'
   })
 };
+
 
