@@ -1,12 +1,63 @@
 const userModel = require("../models/index").user;
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const { validatePassword, validateRequiredFields, checkDuplicates } = require('../middleware/validation');
 
-exports.register = async (request, response) => {
-    const { nama_user, username, email, password, confPassword } = request.body;
-    const role = "undefine";
 
-}
+
+// ROLE any user
+
+exports.register = async (request, response, next) => {
+  try {
+    const models = [userModel, userModel];
+    const fields = ['email', 'username'];
+
+    request.requiredFields = ['nama_user', 'username', 'email', 'password', 'confPassword'];
+
+    checkDuplicates(models, fields)(request, response, () => {
+      validateRequiredFields(request, response, () => {
+        validatePassword(request, response, async () => {
+          const { nama_user, username, email, password } = request.body;
+
+          const hashPassword = await argon2.hash(password);
+          const role = "undefined";
+          const user = await userModel.create({
+            nama_user,
+            role,
+            username,
+            email,
+            password: hashPassword,
+          });
+
+          const accessToken = jwt.sign({
+            "userInfo" :{
+                "id_user": user.id_user,
+                "username": user.username,
+                "email": user.email,
+            }
+        }, process.env.ACCESS_TOKEN_SECRET,{
+            expiresIn: Date.now() + process.env.JWT_EXPIRATION
+        });
+
+          response.status(201).json({
+            success: true,
+            data: {
+              nama_user: user.nama_user,
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              token: accessToken
+            },
+            message: "Registrasi Berhasil",
+          });
+        });
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 exports.login = async (req, res) => {
   
