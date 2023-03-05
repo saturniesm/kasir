@@ -8,11 +8,10 @@ const app = express()
 app.use(express.json())
 
 const authController = require('../controllers/auth.controller')
-const refreshTokenController = require('../controllers/refreshtoken.controller')
 
 app.post("/registrasi", authController.register)
 app.post("/login", authController.login)
 app.delete("/logout", authController.logout)
-app.get("/token", refreshTokenController.handleRefreshToken)
+app.get("/token", authController.handleRefreshToken);
 
 module.exports = app

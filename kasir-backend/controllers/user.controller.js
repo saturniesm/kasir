@@ -1,8 +1,6 @@
-// load model for user table
 const userModel = require("../models/index").user;
 const argon2 = require("argon2");
 
-// load operation from Sequelize
 const Op = require("sequelize").Op;
 
 exports.getAllUser = async (request, response) => {
