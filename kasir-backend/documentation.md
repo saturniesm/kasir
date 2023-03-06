@@ -61,3 +61,26 @@ Menu
 - Create a constant for message
 */
 
+=======
+[x] Kasir dapat login ke aplikasi
+[] Melakukan transaksi pemesanan makanan dan minuman
+[] Menentukan nomor meja yang tersedia (meja yang tidak sedang terpakai)
+[] Melihat seluruh daftar transaksi yang ditangani
+[] Mengubah status pembayaran pesanan
+[] Mencetak nota transaksi (desain dan ukuran nota transaksi sesuai kertas roll yang biasa 
+digunakan di kasir)
+
+### Manajer:
+[x] Manajer dapat login ke aplikasi
+[] Melihat seluruh data transaksi seluruh karyawan baik transaksi harian maupun bulanan
+[] Melakukan filtering data transaksi berdasarkan nama karyawan
+[] Melakukan filtering data transaksi berdasarkan tanggal tertentu
+[] Melihat laporan transaksi pendapatan berdasarkan filtering harian maupun bulanan
+[] Melihat dashboard statistik makanan minuman terlaris/paling favorit & paling jarang
+dipesan (tampilan berupa pie chart / bar chart)
+
+### Admin:
+[x] Admin dapat login ke aplikasi
+[] Mengelola data user & mengatur peran user
+[] Mengelola data makanan & minuman
+[] Mengelola data meja

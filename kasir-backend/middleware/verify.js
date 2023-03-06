@@ -25,9 +25,8 @@ exports.verifyAuth = (req, res, next) => {
   }
 };
 
-exports.verifyRole =
-  (...allowedRoles) =>
-  async (req, res, next) => {
+
+exports.verifyRole = (...allowedRoles) => async (req, res, next) => {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader) {
@@ -63,3 +62,4 @@ exports.verifyRole =
       });
     }
   };
+

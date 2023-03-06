@@ -35,7 +35,7 @@ exports.getOneUser = async (request, response) => {
 
 exports.searchUser = async (request, response) => {
   let keyword = request.body.keyword;
-
+  
   let user = await userModel.findAll({
     where: {
       [Op.or]: [
@@ -110,6 +110,7 @@ exports.updateUser = async (request, response) => {
 
 exports.deleteUser = (request, response) => {
   let idUser = request.params.id_user;
+
   userModel
     .destroy({ where: { id_user: idUser } })
     .then((result) => {
@@ -119,10 +120,16 @@ exports.deleteUser = (request, response) => {
       });
     })
     .catch((error) => {
-      // if update's process fail
       return response.json({
         success: false,
         message: error.message,
       });
     });
 };
+
+
+// TODO mengubah peran user
+/**
+ * Mengubah peran user
+ * 
+ * */ 

@@ -94,7 +94,7 @@ exports.login = async (request, response) => {
             where: { id_user: user.id_user },
           }
         );
-
+        
         response.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
@@ -156,6 +156,7 @@ exports.logout = async (request, response) => {
   }
 };
 
+
 // ROLE any user
 exports.handleRefreshToken = async (request, response) => {
   try {
@@ -192,4 +193,11 @@ exports.handleRefreshToken = async (request, response) => {
   }
 };
 
-exports.forgetEmail = async () 
+/*
+Things that i can improve
+- Use express-validator (avoid sql injection that currently my own middleware dont cover etc)
+- Using a logger with winston
+- Is this even best practice including all in one file like this?
+- Create a constan for message
+*/
+
