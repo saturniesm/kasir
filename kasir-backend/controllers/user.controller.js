@@ -4,9 +4,7 @@ const argon2 = require("argon2");
 const Op = require("sequelize").Op;
 
 exports.getAllUser = async (request, response) => {
-  // call findAll() to get all data
   try {
-    // TODO coba pake atrribute biar ga keliattan pw
     let user = await userModel.findAll();
     response.json({
       success: true,
@@ -35,13 +33,8 @@ exports.getOneUser = async (request, response) => {
   }
 };
 
-// create function for filter
 exports.searchUser = async (request, response) => {
-  // define keyword to find data
   let keyword = request.body.keyword;
-
-  // call findAll() within where clause and
-  // operation to find data based on keyword
   let user = await userModel.findAll({
     where: {
       [Op.or]: [
@@ -87,7 +80,6 @@ exports.addUser = async (request, response) => {
 }
 
 exports.updateUser = async (request, response) => {
-  // prepare data that has been changed
   const hashPassword = await argon2.hash(request.body.password);
   let dataUser = {
     nama_user: request.body.nama_user,
@@ -97,14 +89,11 @@ exports.updateUser = async (request, response) => {
     password: hashPassword,
   };
 
-  // define id user that will be update
   let idUser = request.params.id_user;
 
-  // execute update data based on defined id member
   userModel
     .update(dataUser, { where: { id_user: idUser } })
     .then((result) => {
-      // if update's process success
       return response.json({
         success: true,
         data: dataUser,
@@ -112,7 +101,6 @@ exports.updateUser = async (request, response) => {
       });
     })
     .catch((error) => {
-      // if update's process fail
       return response.json({
         success: false,
         message: error.message,
@@ -120,12 +108,9 @@ exports.updateUser = async (request, response) => {
     });
 };
 
-// create function to delete data
 exports.deleteUser = (request, response) => {
-  // define id user that will be update
   let idUser = request.params.id_user;
 
-  // execute delete data based on defined id user
   userModel
     .destroy({ where: { id_user: idUser } })
     .then((result) => {
@@ -135,10 +120,16 @@ exports.deleteUser = (request, response) => {
       });
     })
     .catch((error) => {
-      // if update's process fail
       return response.json({
         success: false,
         message: error.message,
       });
     });
 };
+
+
+// TODO mengubah peran user
+/**
+ * Mengubah peran user
+ * 
+ * */ 

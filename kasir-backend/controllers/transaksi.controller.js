@@ -190,3 +190,16 @@ exports.findOneTransaksi = async (req, res) => {
     });
   }
 };
+
+
+// TODO riset apakah perlu dibuat tiga controller yang berbeda untuk transaksi harian, tanggal, dan juga bulanan
+// TODO controller khusus filter yang nanti input nama
+// TODO controller berdasarkan tanggal
+// TODO controller berdasarkan bulanan dan harian 
+// TODO controller laporan transaksi
+// TODO controller statistic
+
+
+
+
+

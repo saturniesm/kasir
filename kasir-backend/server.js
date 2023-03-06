@@ -1,7 +1,10 @@
 const express = require(`express`)
 const cors = require(`cors`)
+
 require('dotenv').config()
+
 const cookieParser = require(`cookie-parser`)
+const middleware = require('./middleware/verify')
 
 
 const app = express()
@@ -15,6 +18,7 @@ const menuRoute = require('./routes/menu.route')
 const authRoute = require('./routes/auth.route')
 
 app.use(`/auth`, authRoute)
+app.use(middleware.verifyAuth);
 app.use(`/user`, userRoute)
 app.use(`/meja`, mejaRoute)
 app.use(`/menu`, menuRoute)
