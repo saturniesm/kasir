@@ -1,5 +1,3 @@
-const detail_transaksi = require("../models/detail_transaksi");
-const transaksi = require("../models/transaksi");
 const transaksiModel = require("../models/index").transaksi;
 const detailTransaksiModel = require("../models/index").detail_transaksi;
 const mejaModel = require("../models/index").meja;
@@ -14,27 +12,16 @@ exports.addTransaksi = async (request, response) => {
     status: request.body.status,
   };
 
-  // insert ke tabel transaksi
   transaksiModel
     .create(newData)
     .then((result) => {
-      // mengambil id terakhir dari transaksi
       let transaksiID = result.id_transaksi;
-      // menyimpan detail_transaksi dari request ini dalam bentuk array
       let detailTransaksi = request.body.detail_transaksi;
 
-      // insert transaksiID ke tiap item di detail_transaksi
-      // (1 transaksi bisa memiliki beberapa detail_transaksi)
       for (let i = 0; i < detailTransaksi.length; i++) {
         detailTransaksi[i].id_transaksi = transaksiID;
       }
       console.log(detailTransaksi);
-      // insert semua detail_transaksi
-      // (termasuk id_transaksi yang diambil dari
-      // result.id ke setiap detail_transaksi yang berkaitan)
-
-      // TODO gimana biar id_transaksi bisa masuk ke detail_transaksi
-
       detailTransaksiModel
         .bulkCreate(detailTransaksi)
         .then((result) => {
@@ -136,12 +123,14 @@ exports.deleteTransaksi = async (request, response) => {
     });
 };
 
-//TODO kurang pembayaran transaksi dimana meja akan diubah dari status tersedia menjadi tidak tersedia atau sebaliknya
 exports.createPayment = async (request, response) => {
   const params = {
     id_transaksi: request.params.id_transaksi,
   };
-  const transaksinya = await transaksiModel.findOne({ attributes: ["id_meja"], where : params });
+  const transaksinya = await transaksiModel.findOne({
+    attributes: ["id_meja"],
+    where: params,
+  });
   let mejaID = transaksinya.id_meja;
   console.log("Ini Error apa", mejaID);
   mejaModel
@@ -176,7 +165,10 @@ exports.findOneTransaksi = async (req, res) => {
       id_transaksi: req.params.id_transaksi,
     };
 
-    const result = await transaksiModel.findOne({ attributes: ["id_meja"], where : params });
+    const result = await transaksiModel.findOne({
+      attributes: ["id_meja"],
+      where: params,
+    });
     return res.json({
       success: true,
       data: result,

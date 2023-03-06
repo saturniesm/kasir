@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       id_user: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       uuid: {
         type: DataTypes.STRING,
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [3, 100],
         },
       },
-      role: DataTypes.ENUM("admin", "kasir", "manager", "undefine"),
+      role: DataTypes.ENUM("admin", "kasir", "manager", "default"),
       username: {
         type: DataTypes.STRING,
         allowNull: false,

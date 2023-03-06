@@ -35,6 +35,7 @@ exports.getOneUser = async (request, response) => {
 
 exports.searchUser = async (request, response) => {
   let keyword = request.body.keyword;
+  
   let user = await userModel.findAll({
     where: {
       [Op.or]: [
@@ -50,7 +51,6 @@ exports.searchUser = async (request, response) => {
     message: "Searching success",
   });
 };
-
 
 exports.addUser = async (request, response) => {
   const { nama_user, role, username, email, password, confPassword } = request.body;

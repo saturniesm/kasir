@@ -8,7 +8,6 @@ app.use(express.json());
 const userController = require("../controllers/user.controller");
 const verify = require('../middleware/verify');
 
-
 app.get(
   "/",
   verify.verifyRole("admin","manager"),
