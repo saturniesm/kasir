@@ -7,7 +7,6 @@ const app = express();
 // allow to read 'request with json type
 app.use(express.json());
 
-
 const mejaController = require("../controllers/meja.controller");
 app.get("/", mejaController.getAllMeja);
 app.get("/:id_meja", mejaController.getOneMeja);

@@ -32,7 +32,7 @@ exports.register = async (request, response, next) => {
         validatePassword(request, response, async () => {
           const { nama_user, username, email, password } = request.body;
           const hashPassword = await argon2.hash(password);
-          const role = "undefined";
+          const role = "default";
 
           const user = await userModel.create({
             nama_user,
@@ -42,7 +42,7 @@ exports.register = async (request, response, next) => {
             password: hashPassword,
           });
 
-          const accessToken = generateAccessToken(username, email, role);
+          const accessToken = generateAccessToken({ username, email, role });
 
           response.status(201).json({
             success: true,
@@ -82,16 +82,11 @@ exports.login = async (request, response) => {
           return response.status(401).json({ message: "Wrong password" });
         }
 
-        const { username, email: userEmail, role, id_user } = user;
-        const accessToken = generateAccessToken(username, userEmail, role);
-        const refreshToken = generateRefreshToken(
-          username,
-          userEmail,
-          role,
-          id_user
-        );
+        const { username, email: userEmail, role } = user;
+        const accessToken = generateAccessToken({ username, email, role });
 
-        // TODO understanding this
+        const userInfo = { username, email: userEmail, role };
+        const refreshToken = generateRefreshToken(userInfo);
 
         await userModel.update(
           { refresh_token: refreshToken },
@@ -99,6 +94,7 @@ exports.login = async (request, response) => {
             where: { id_user: user.id_user },
           }
         );
+
         response.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
@@ -120,6 +116,7 @@ exports.login = async (request, response) => {
   }
 };
 
+//ROLE any user
 exports.logout = async (request, response) => {
   try {
     const refreshToken = request.cookies.refreshToken;
@@ -159,6 +156,7 @@ exports.logout = async (request, response) => {
   }
 };
 
+// ROLE any user
 exports.handleRefreshToken = async (request, response) => {
   try {
     const refreshToken = request.cookies.refreshToken;
@@ -194,11 +192,4 @@ exports.handleRefreshToken = async (request, response) => {
   }
 };
 
-/*
-
-Things that i can improve
-- Use express-validator (avoid sql injection that currently my own middleware dont cover etc)
-- Using a logger with winston
-- Is this even best practice including all in one file like this?
-- Create a constan for message
-*/
+exports.forgetEmail = async () 

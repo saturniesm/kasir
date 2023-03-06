@@ -4,7 +4,6 @@ const path = require("path");
 const fs = require("fs");
 const upload = require(`./upload-cover`).single(`cover`);
 
-// create function to get all menu
 exports.getAllMenu = async (request, response) => {
   // call findAll() to get all data
   let menu = await menuModel.findAll();
@@ -32,7 +31,6 @@ exports.getOneMenu = async (request, response) => {
   }
 };
 
-// create function for filter using keyword
 exports.findMenu = async (request, response) => {
   // define keyword to find data
   let keyword = request.body.keyword;
@@ -58,7 +56,6 @@ exports.addMenu = (request, response) => {
     return response.json({ message: "nothing to upload" });
   }
 
-  // prepare data from request
   let newMenu = {
     nama_menu: request.body.nama_menu,
     jenis: request.body.jenis,
@@ -79,7 +76,6 @@ exports.addMenu = (request, response) => {
     })
 
     .catch((error) => {
-      // if insert's process failed
       return response.json({
         success: false,
         message: error.message,
@@ -87,7 +83,6 @@ exports.addMenu = (request, response) => {
     });
 };
 
-// create function to update menu
 exports.updateMenu = async (request, response) => {
   // run upload function
   upload(request, response, async (error) => {

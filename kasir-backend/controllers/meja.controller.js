@@ -70,20 +70,16 @@ exports.addMeja = (request, response) => {
 };
 
 exports.updateMeja = (request, response) => {
-  // prepare data that has been changed
   let dataMeja = {
     nomor_meja: request.body.nomor_meja,
     status: request.body.status,
   };
 
-  // define id meja that will be update
   let idMeja = request.params.id_meja;
 
-  // execute update data based on defined id member
   mejaModel
     .update(dataMeja, { where: { id_meja: idMeja } })
     .then((result) => {
-      // if update's process success
       return response.json({
         success: true,
         data: dataMeja,
@@ -91,7 +87,6 @@ exports.updateMeja = (request, response) => {
       });
     })
     .catch((error) => {
-      // if update's process fail
       return response.json({
         success: false,
         message: error.message,
@@ -112,7 +107,6 @@ exports.deleteMeja = (request, response) => {
       });
     })
     .catch((error) => {
-      // if update's process fail
       return response.json({
         success: false,
         message: error.message,
