@@ -3,133 +3,241 @@ const argon2 = require("argon2");
 
 const Op = require("sequelize").Op;
 
+const {
+  validatePassword,
+  validateRequiredFields,
+  checkDuplicates,
+  validateEmail,
+} = require("../middleware/validation");
+const {
+  generateAccessToken,
+} = require("../middleware/token");
+
+
 exports.getAllUser = async (request, response) => {
   try {
-    let user = await userModel.findAll();
-    response.json({
-      success: true,
-      data: user,
-      message: "All user have been loaded",
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await userModel.findAndCountAll({
+      offset,
+      limit,
     });
-  } catch (err) {
-    console.log(err);
+
+    const totalPages = Math.ceil(count / limit);
+
+    response.status(200).json({
+      success: true,
+      data: rows,
+      total_pages: totalPages,
+      current_page: page,
+      message: "All users have been loaded",
+    });
+  } catch (error) {
+    response.status(500).json({ message: "Server error" });
   }
 };
+
 
 exports.getOneUser = async (request, response) => {
   try {
-    let user = await userModel.findOne({
+    const user_id = request.params.id;
+    const user = await userModel.findByPk(user_id, {
+      attributes: { exclude: ["password", "refreshToken"] },
+    });
+    if (!user) {
+      return response.status(404).json({ message: "User not found" });
+    }
+    response.status(200).json({ success: true, data: user,  message: "User has been loaded"});
+  } catch (error) {
+    response.status(500).json({ message: "Server error" });
+  }
+};
+
+
+exports.searchUser = async (req, res) => {
+  try {
+    const { q: keyword } = req.query;
+
+    const users = await userModel.findAll({
       where: {
-        id_user: request.params.id_user,
+        [Op.or]: [
+          { username: { [Op.substring]: keyword } },
+          { email: { [Op.substring]: keyword } },
+          { role: { [Op.substring]: keyword } },
+        ],
       },
     });
-    response.json({
+
+    res.json({
       success: true,
-      data: user,
-      message: "One user has been loaded",
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-exports.searchUser = async (request, response) => {
-  let keyword = request.body.keyword;
-  
-  let user = await userModel.findAll({
-    where: {
-      [Op.or]: [
-        { username: { [Op.substring]: keyword } },
-        { email: { [Op.substring]: keyword } },
-        { role: { [Op.substring]: keyword } },
-      ],
-    },
-  });
-  return response.json({
-    success: true,
-    data: user,
-    message: "Searching success",
-  });
-};
-
-exports.addUser = async (request, response) => {
-  const { nama_user, role, username, email, password, confPassword } = request.body;
-  if (password !== confPassword)
-    return response.status(400).json({
-      msg: "Password dan Confirm Password tidak cocok",
-    });
-  const hashPassword = await argon2.hash(password);
-  try {
-    const user = await userModel.create({
-      nama_user: nama_user,
-      role: role,
-      username: username,
-      email: email,
-      password: hashPassword,
-    });
-    response.status(201).json({
-      succes: true,
-      data: user,
-      message: "Register Berhasil",
+      data: users,
+      message: `Found ${users.length} users matching "${keyword}"`,
     });
   } catch (error) {
-    response.status(400).json({
-      message: error.message,
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
     });
   }
-}
+};
+
+
+exports.addUser = async (request, response, next) => {
+  try {
+    const models = [userModel, userModel];
+    const fields = ["email", "username"];
+
+    request.requiredFields = [
+      "nama_user",
+      "role",
+      "username",
+      "email",
+      "password",
+      "confPassword",
+    ];
+
+    checkDuplicates(models, fields)(request, response, () => {
+      validateRequiredFields(request, response, () => {
+        validateEmail(request, response, () => {
+          validatePassword(request, response, async () => {
+            const { nama_user, role, username, email, password } = request.body;
+            const hashPassword = await argon2.hash(password);
+
+            const user = await userModel.create({
+              nama_user,
+              role,
+              username,
+              email,
+              password: hashPassword,
+            });
+
+            const accessToken = generateAccessToken({ username, email, role });
+
+            response.status(201).json({
+              success: true,
+              data: {
+                nama_user: user.nama_user,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                token: accessToken,
+              },
+              message: "User has been added",
+            });
+          });
+        });
+       });
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
+
+
 
 exports.updateUser = async (request, response) => {
-  const hashPassword = await argon2.hash(request.body.password);
-  let dataUser = {
-    nama_user: request.body.nama_user,
-    role: request.body.role,
-    username: request.body.username,
-    email: request.body.email,
-    password: hashPassword,
-  };
+  const { nama_user, role, username, email, password } = request.body;
 
-  let idUser = request.params.id_user;
+  const idUser = request.params.id_user;
 
-  userModel
-    .update(dataUser, { where: { id_user: idUser } })
-    .then((result) => {
-      return response.json({
-        success: true,
-        data: dataUser,
-        message: "Data user has been updated",
-      });
-    })
-    .catch((error) => {
-      return response.json({
+  try {
+    const updatedUser = await userModel.findByPk(idUser);
+    if (!updatedUser) {
+      return response.status(404).json({
         success: false,
-        message: error.message,
+        message: "User not found",
       });
+    }
+
+    if (password) {
+      const hashPassword = await argon2.hash(password);
+      updatedUser.password = hashPassword;
+    }
+
+    await updatedUser.update({ nama_user, role, username, email });
+
+    return response.status(204).end();
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
     });
+  }
 };
 
-exports.deleteUser = (request, response) => {
-  let idUser = request.params.id_user;
 
-  userModel
-    .destroy({ where: { id_user: idUser } })
-    .then((result) => {
-      return response.json({
-        success: true,
-        message: "Data user has been updated",
-      });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
+exports.updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user_id = req.params.id_user;
+
+    const user = await userModel.findByPk(user_id, {
+      attributes: { exclude: ["password", "refreshToken"] },
     });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `User role updated to ${role}`,
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
+  }
 };
+
+
+exports.deleteUser = async (request, response) => {
+  const idUser = request.params.id_user;
+
+  try {
+    const user = await userModel.findByPk(idUser);
+    if (!user) {
+      return response.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    await user.destroy();
+
+    return response.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
 
 
 // TODO mengubah peran user
 /**
- * Mengubah peran user
+ * - add validation
+ * - error message e benakno
+ * - add log activity
  * 
  * */ 

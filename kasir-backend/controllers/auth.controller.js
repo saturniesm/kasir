@@ -59,7 +59,11 @@ exports.register = async (request, response, next) => {
       });
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
   }
 };
 
@@ -112,7 +116,11 @@ exports.login = async (request, response) => {
       });
     });
   } catch (error) {
-    response.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
   }
 };
 
@@ -149,10 +157,17 @@ exports.logout = async (request, response) => {
     response.clearCookie("refreshToken");
 
     return response.status(200).json({
-      message: "Logout success",
+      success: true,
+      data: {},
+      message: "All user have been loaded",
     });
+
   } catch (error) {
-    next(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
   }
 };
 
@@ -183,21 +198,91 @@ exports.handleRefreshToken = async (request, response) => {
       );
 
       const accessToken = generateAccessToken(id_user, username, email, role);
-      response.json({ accessToken });
+
+      return response.status(200).json({
+        success: true,
+        data: { accessToken },
+        message: "All user have been loaded",
+      });
+
     } catch (error) {
-      console.error(error);
       response.status(403).json({ error: "Invalid refresh token" });
     }
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
   }
 };
 
-/*
-Things that i can improve
-- Use express-validator (avoid sql injection that currently my own middleware dont cover etc)
-- Using a logger with winston
-- Is this even best practice including all in one file like this?
-- Create a constan for message
-*/
+
+exports.updateEmail = async (request, response) => {
+  const { id } = request.params;
+  const { email } = request.body;
+  try { 
+    validateEmail(request, response, async () => {
+      const user = await userModel.findOne({ where: { id } });
+      if (!user) {
+        return response.status(404).json({ message: 'User not found' });
+      }
+      await user.update({ email });
+      return response.status(200).json({
+        success: true,
+        data: {
+          email: user.email
+        },
+        message: "Email updated successfully",
+      });
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+}
+
+
+exports.updatePassword = async (request, response) => {
+  const { id_user } = request.params;
+  const { password_lama, password_baru } = request.body;
+
+  try {
+    const user = await userModel.findOne({ where: { id_user } });
+    
+    if (!user) {
+      return response.status(404).json({ message: 'User not found' });
+    }
+
+    const passwordMatch = await argon2.verify(user.password, password_lama);
+    
+    if (!passwordMatch) {
+      return response.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    const hashedPassword = await argon2.hash(password_baru);
+
+    await user.update({ password: hashedPassword });
+
+    return response.status(200).json({
+      success: true,
+      data: {
+        password_lama: password_lama,
+        password_baru: password_baru,
+      },
+      message: "Update password success",
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
+
 

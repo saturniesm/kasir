@@ -67,10 +67,10 @@ exports.validateEmail = (req, res, next) => {
 
   if (!emailRegex.test(email)) {
     return res.status(400).json({
-      message: "Invalid email address",
+      message: "Invalid email type",
     });
   }
-
+  
   next();
 };
 
