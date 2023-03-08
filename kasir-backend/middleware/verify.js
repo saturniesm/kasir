@@ -1,21 +1,25 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const userModel = require("../models/index").user;
 
-exports.verifyAuth = (req, res, next) => {
+exports.verifyAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ message: "Authorization header is missing" });
   }
-
   const [authType, token] = authHeader.split(" ");
-
   if (authType !== "Bearer") {
     return res.status(401).json({ message: "Invalid authorization type" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const isLoggedIn = await isUserLoggedIn(decoded.userInfo.email);
+
+    if (!isLoggedIn) {
+      return res.status(401).json({ error: "User has logged out" });
+    }
 
     req.userInfo = decoded;
 
@@ -25,8 +29,9 @@ exports.verifyAuth = (req, res, next) => {
   }
 };
 
-
-exports.verifyRole = (...allowedRoles) => async (req, res, next) => {
+exports.verifyRole =
+  (...allowedRoles) =>
+  async (req, res, next) => {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader) {
@@ -54,12 +59,23 @@ exports.verifyRole = (...allowedRoles) => async (req, res, next) => {
       }
 
       req.user = decoded.userInfo;
+
       next();
     } catch (error) {
-      console.log(error);
       return res.status(403).json({
         message: "Invalid token",
       });
     }
   };
 
+async function isUserLoggedIn(userEmail) {
+  try {
+    const user = await userModel.findOne({
+      where: { email: userEmail },
+      attributes: ["refresh_token"],
+    });
+    return user.refresh_token !== null;
+  } catch (error) {
+    return false;
+  }
+}

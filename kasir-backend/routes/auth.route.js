@@ -13,7 +13,7 @@ app.post("/registrasi", authController.register)
 app.post("/login", authController.login)
 app.delete("/logout", authController.logout)
 app.get("/token", authController.handleRefreshToken)
-app.post("/reset-email", authController.updateEmail)
-app.post("/reset-password", authController.updatePassword)
+app.post("/reset-email/:id_user", authController.updateEmail);
+app.post("/reset-password/:id_user", authController.updatePassword);
 
 module.exports = app

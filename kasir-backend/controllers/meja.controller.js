@@ -3,7 +3,6 @@ const mejaModel = require("../models/index").meja;
 const Op = require("sequelize").Op;
 
 exports.getAllMeja = async (request, response) => {
-
   let meja = await mejaModel.findAll();
   return response.json({
     success: true,
@@ -29,7 +28,6 @@ exports.getOneMeja = async (request, response) => {
   }
 };
 
-
 exports.findMeja = async (request, response) => {
   let keyword = request.body.keyword;
 
@@ -46,7 +44,6 @@ exports.findMeja = async (request, response) => {
 };
 
 exports.addMeja = (request, response) => {
-
   let newMeja = {
     nomor_meja: request.body.nomor_meja,
     status: request.body.status,
@@ -93,7 +90,6 @@ exports.updateMeja = (request, response) => {
       });
     });
 };
-
 
 exports.deleteMeja = (request, response) => {
   let idMeja = request.params.id_meja;

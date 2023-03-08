@@ -1,44 +1,53 @@
 # GET USER
-GET  http://localhost:8080/user HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6ImJlcnNhbWEiLCJlbWFpbCI6ImJlcnNhbWFAZXhhbXBsZS5jb20iLCJyb2xlIjoiZGVmYXVsdCJ9LCJpYXQiOjE2NzgxMTIyNTIsImV4cCI6MTY3OTc5MDM2Nzg2Mn0.KxsOCH1uUersXD_n7kG-K_-_fvfDb48eSlLjzaSxG28
-### GET USER BY ID
-GET  http://localhost:8080/user/1 HTTP/1.1
+GET  http://localhost:8080/user/get HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+
+###
+GET  http://localhost:8080/user/get/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+
 
 ### INSERT USER
 POST http://localhost:8080/user/add HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
 Content-Type: application/json
 
 {
-    "nama_user": "saturniesm",
-    "role": "admin",
-    "username": "syela",
-    "email": "coba@gmail.com",
-    "password": "12345",
-    "confPassword": "12345"
+    "nama_user": "coba", 
+    "role": "default",
+    "username": "coba", 
+    "email": "coba@example.com", 
+    "password": "Password123#", 
+    "confPassword": "Password123#"
 }
-
 
 ### FIND USER BY KEYWORD
-POST http://localhost:8080/user/find HTTP/1.1
-Content-Type: application/json
-
-{
-    "keyword": "saturniesm"
-}
-
+GET http://localhost:8080/user/search-user?q=@example.com HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
 
 ### EDIT USER
-PUT http://localhost:8080/user/3 HTTP/1.1
+PUT http://localhost:8080/user/edit/3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
 Content-Type: application/json
 
 {
     "nama_user": "saturniesm",
     "role": "admin",
-    "username": "syela",
-    "email": "saturniesm@gmail.com",
-    "password": "23423432"
+    "username": "bersamas",
+    "email": "bersamas@gmail.com"
+}
+
+### EDIT USER ROLE
+PUT http://localhost:8080/user/update-role/4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Content-Type: application/json
+
+{
+    "role": "admin"
 }
 
 
 ###DELETE USER
-DELETE  http://localhost:8080/user/1 HTTP/1.1
+DELETE  http://localhost:8080/user/delete/3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+

@@ -6,42 +6,40 @@ const app = express();
 app.use(express.json());
 
 const userController = require("../controllers/user.controller");
-const verify = require('../middleware/verify');
+const verify = require("../middleware/verify");
 
 app.get(
-  "/",
-  verify.verifyRole("admin","manager"),
+  "/get",
+  verify.verifyRole("admin", "default"),
   userController.getAllUser
 );
 
 app.get(
-  "/:id_user", 
+  "/get/:id_user",
   verify.verifyRole("admin", "manager"),
   userController.getOneUser
 );
 
-app.post(
-  "/add", 
-  verify.verifyRole("admin"), 
-  userController.addUser
-);
-
-app.post(
-  "/find", 
-  verify.verifyRole("admin", "manager"),
-  userController.searchUser
-);
+app.post("/add", verify.verifyRole("admin"), userController.addUser);
 
 app.put(
-  "/:id_user", 
+  "/edit/:id_user",
   verify.verifyRole("admin"),
   userController.updateUser
 );
 
 app.delete(
-  "/:id_user", 
-  verify.verifyRole("admin"), 
+  "/delete/:id_user",
+  verify.verifyRole("admin"),
   userController.deleteUser
+);
+
+app.get("/search-user", verify.verifyRole("admin"), userController.searchUser);
+
+app.put(
+  "/update-role/:id_user",
+  verify.verifyRole("admin"),
+  userController.updateUserRole
 );
 
 module.exports = app;

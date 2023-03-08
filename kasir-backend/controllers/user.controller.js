@@ -9,10 +9,8 @@ const {
   checkDuplicates,
   validateEmail,
 } = require("../middleware/validation");
-const {
-  generateAccessToken,
-} = require("../middleware/token");
 
+const { generateAccessToken } = require("../middleware/token");
 
 exports.getAllUser = async (request, response) => {
   try {
@@ -21,6 +19,7 @@ exports.getAllUser = async (request, response) => {
     const offset = (page - 1) * limit;
 
     const { count, rows } = await userModel.findAndCountAll({
+      attributes: { exclude: ["password", "refreshToken"] },
       offset,
       limit,
     });
@@ -39,26 +38,26 @@ exports.getAllUser = async (request, response) => {
   }
 };
 
-
 exports.getOneUser = async (request, response) => {
   try {
-    const user_id = request.params.id;
-    const user = await userModel.findByPk(user_id, {
+    const id_user = request.params.id_user;
+    const user = await userModel.findByPk(id_user, {
       attributes: { exclude: ["password", "refreshToken"] },
     });
     if (!user) {
       return response.status(404).json({ message: "User not found" });
     }
-    response.status(200).json({ success: true, data: user,  message: "User has been loaded"});
+    response
+      .status(200)
+      .json({ success: true, data: user, message: "User has been loaded" });
   } catch (error) {
     response.status(500).json({ message: "Server error" });
   }
 };
 
-
-exports.searchUser = async (req, res) => {
+exports.searchUser = async (request, response) => {
   try {
-    const { q: keyword } = req.query;
+    const { q: keyword } = request.query;
 
     const users = await userModel.findAll({
       where: {
@@ -70,20 +69,19 @@ exports.searchUser = async (req, res) => {
       },
     });
 
-    res.json({
+    response.json({
       success: true,
       data: users,
       message: `Found ${users.length} users matching "${keyword}"`,
     });
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
-
 
 exports.addUser = async (request, response, next) => {
   try {
@@ -129,41 +127,66 @@ exports.addUser = async (request, response, next) => {
             });
           });
         });
-       });
+      });
     });
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
 
-
-
 exports.updateUser = async (request, response) => {
-  const { nama_user, role, username, email, password } = request.body;
-
-  const idUser = request.params.id_user;
-
   try {
-    const updatedUser = await userModel.findByPk(idUser);
-    if (!updatedUser) {
-      return response.status(404).json({
-        success: false,
-        message: "User not found",
+    const models = [userModel, userModel];
+    const fields = ["email", "username"];
+
+    request.requiredFields = [
+      "nama_user",
+      "username",
+      "email",
+    ];
+
+    const { nama_user, role, username, email, password } = request.body;
+
+    const idUser = request.params.id_user;
+
+    checkDuplicates(models, fields)(request, response, () => {
+      validateRequiredFields(request, response, () => {
+        validateEmail(request, response, async () => {
+          const updatedUser = await userModel.findByPk(idUser);
+          if (!updatedUser) {
+            return response.status(404).json({
+              success: false,
+              message: "User not found",
+            });
+          }
+
+          if (password) {
+            validatePassword(request, response, async () => {
+              const hashPassword = await argon2.hash(password);
+              updatedUser.password = hashPassword;
+            });
+          }
+
+          await updatedUser.update({ nama_user, role, username, email });
+
+          return response.status(201).json({
+            success: true,
+            data: {
+              nama_user: updatedUser.nama_user,
+              username: updatedUser.username,
+              email: updatedUser.email,
+              role: updatedUser.role,
+            },
+            message: "User has been updated",
+          });
+          
+        });
       });
-    }
-
-    if (password) {
-      const hashPassword = await argon2.hash(password);
-      updatedUser.password = hashPassword;
-    }
-
-    await updatedUser.update({ nama_user, role, username, email });
-
-    return response.status(204).end();
+    });
   } catch (error) {
     return response.status(500).json({
       success: false,
@@ -177,9 +200,9 @@ exports.updateUser = async (request, response) => {
 exports.updateUserRole = async (req, res) => {
   try {
     const { role } = req.body;
-    const user_id = req.params.id_user;
+    const id_user = req.params.id_user;
 
-    const user = await userModel.findByPk(user_id, {
+    const user = await userModel.findByPk(id_user, {
       attributes: { exclude: ["password", "refreshToken"] },
     });
 
@@ -197,12 +220,11 @@ exports.updateUserRole = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
-
 
 exports.deleteUser = async (request, response) => {
   const idUser = request.params.id_user;
@@ -230,14 +252,3 @@ exports.deleteUser = async (request, response) => {
     });
   }
 };
-
-
-
-
-// TODO mengubah peran user
-/**
- * - add validation
- * - error message e benakno
- * - add log activity
- * 
- * */ 

@@ -1,11 +1,11 @@
 ### Register
-POST http://localhost:8080/auth/register HTTP/1.1
+POST http://localhost:8080/auth/registrasi HTTP/1.1
 Content-Type: application/json
 
 {
-    "nama_user": "Admin", 
-    "username": "Admin", 
-    "email": "admin@example.com", 
+    "nama_user": "Kasir", 
+    "username": "Kasir", 
+    "email": "kasir@example.com", 
     "password": "Password123#", 
     "confPassword": "Password123#"
 }
@@ -15,7 +15,7 @@ POST http://localhost:8080/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "bersama@example.com", 
+    "email": "admin@example.com", 
     "password": "Password123#"
 }
 
@@ -27,3 +27,22 @@ Content-Type: application/json
 GET http://localhost:8080/auth/token HTTP/1.1
 Content-Type: application/json
 
+
+
+### Ganti Email
+POST http://localhost:8080/auth/reset-email/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "kasir@example.com"
+}
+
+### Ganti password
+POST http://localhost:8080/auth/reset-password/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "password_lama": "Password123#",
+    "password_baru": "Password123#d"
+
+}

@@ -59,9 +59,9 @@ exports.register = async (request, response, next) => {
       });
     });
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
@@ -98,7 +98,7 @@ exports.login = async (request, response) => {
             where: { id_user: user.id_user },
           }
         );
-        
+
         response.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
@@ -116,9 +116,9 @@ exports.login = async (request, response) => {
       });
     });
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
@@ -158,19 +158,16 @@ exports.logout = async (request, response) => {
 
     return response.status(200).json({
       success: true,
-      data: {},
-      message: "All user have been loaded",
+      message: "Logout successful",
     });
-
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
-
 
 // ROLE any user
 exports.handleRefreshToken = async (request, response) => {
@@ -202,49 +199,46 @@ exports.handleRefreshToken = async (request, response) => {
       return response.status(200).json({
         success: true,
         data: { accessToken },
-        message: "All user have been loaded",
+        message: "New Access token retrieved successfully",
       });
-
     } catch (error) {
       response.status(403).json({ error: "Invalid refresh token" });
     }
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
 
-
 exports.updateEmail = async (request, response) => {
-  const { id } = request.params;
+  const { id_user } = request.params;
   const { email } = request.body;
-  try { 
+  try {
     validateEmail(request, response, async () => {
-      const user = await userModel.findOne({ where: { id } });
+      const user = await userModel.findByPk(id_user);
       if (!user) {
-        return response.status(404).json({ message: 'User not found' });
+        return response.status(404).json({ message: "User not found" });
       }
       await user.update({ email });
       return response.status(200).json({
         success: true,
         data: {
-          email: user.email
+          email: user.email,
         },
         message: "Email updated successfully",
       });
-    })
+    });
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
-}
-
+};
 
 exports.updatePassword = async (request, response) => {
   const { id_user } = request.params;
@@ -252,15 +246,17 @@ exports.updatePassword = async (request, response) => {
 
   try {
     const user = await userModel.findOne({ where: { id_user } });
-    
+
     if (!user) {
-      return response.status(404).json({ message: 'User not found' });
+      return response.status(404).json({ message: "User not found" });
     }
 
     const passwordMatch = await argon2.verify(user.password, password_lama);
-    
+
     if (!passwordMatch) {
-      return response.status(401).json({ message: 'Current password is incorrect' });
+      return response
+        .status(401)
+        .json({ message: "Current password is incorrect" });
     }
 
     const hashedPassword = await argon2.hash(password_baru);
@@ -275,14 +271,11 @@ exports.updatePassword = async (request, response) => {
       },
       message: "Update password success",
     });
-
   } catch (error) {
-    res.status(500).json({
+    response.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: error.message,
     });
   }
 };
-
-
