@@ -32,12 +32,12 @@ Auth
 - [x] kasir dan undefined dapat mengubah email, username, dan password mereka. hanya milik mereka dan bukan orang lain. 
 
 User
-- [] Mengelola data user 
-- [] Mengatur peran user 
+- [x] Mengelola data user 
+- [x] Mengatur peran user 
 
 Meja
-- [] Menentukan nomor meja yang tersedia (meja yang tidak sedang terpakai)
-- [] Mengelola data meja 
+- [x] Menentukan nomor meja yang tersedia (meja yang tidak sedang terpakai)
+- [x] Mengelola data meja 
 
 Transaksi
 - [] Melakukan transaksi pemesanan makanan dan minuman

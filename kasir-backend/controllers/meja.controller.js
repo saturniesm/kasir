@@ -1,111 +1,225 @@
+const { Op } = require("sequelize");
 const mejaModel = require("../models/index").meja;
 
-const Op = require("sequelize").Op;
+const {
+  validateRequiredFields,
+  checkDuplicates,
+} = require("../middleware/validation");
 
 exports.getAllMeja = async (request, response) => {
-  let meja = await mejaModel.findAll();
-  return response.json({
-    success: true,
-    data: meja,
-    message: "All meja have been loaded",
-  });
+  try {
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await mejaModel.findAndCountAll({
+      offset,
+      limit,
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    response.status(200).json({
+      success: true,
+      data: rows,
+      total_pages: totalPages,
+      current_page: page,
+      message: "All mejas have been loaded",
+    });
+  } catch (error) {
+    response.status(500).json({ message: "Server error" });
+  }
 };
 
 exports.getOneMeja = async (request, response) => {
   try {
-    let meja = await mejaModel.findAll({
-      where: {
-        id_meja: request.params.id_meja,
-      },
-    });
-    response.json({
-      success: true,
-      data: meja,
-      message: "One meja has been loaded",
-    });
-  } catch (err) {
-    console.log(err);
+    const id_meja = request.params.id_meja;
+    const meja = await mejaModel.findByPk(id_meja);
+    if (!meja) {
+      return response.status(404).json({ message: "Meja not found" });
+    }
+    response
+      .status(200)
+      .json({ success: true, data: meja, message: "Meja has been loaded" });
+  } catch (error) {
+    response.status(500).json({ message: "Server error" });
   }
 };
 
-exports.findMeja = async (request, response) => {
-  let keyword = request.body.keyword;
+exports.addMeja = async (request, response, next) => {
+  try {
+    const models = [mejaModel];
+    const fields = ["nomor_meja"];
 
-  let meja = await mejaModel.findAll({
-    where: {
-      [Op.or]: [{ status: { [Op.substring]: keyword } }],
-    },
-  });
-  return response.json({
-    success: true,
-    data: meja,
-    message: "All meja have been loaded",
-  });
-};
+    request.requiredFields = ["nomor_meja", "status"];
 
-exports.addMeja = (request, response) => {
-  let newMeja = {
-    nomor_meja: request.body.nomor_meja,
-    status: request.body.status,
-  };
+    checkDuplicates(models, fields)(request, response, () => {
+      validateRequiredFields(request, response, async () => {
+        const { nomor_meja, status } = request.body;
 
-  mejaModel
-    .create(newMeja)
-    .then((result) => {
-      return response.json({
-        success: true,
-        data: result,
-        message: "New meja has been inserted",
-      });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
+        const meja = await mejaModel.create({
+          nomor_meja,
+          status,
+        });
+
+        response.status(201).json({
+          success: true,
+          data: { meja },
+          message: "Meja has been added",
+        });
       });
     });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
 };
 
-exports.updateMeja = (request, response) => {
-  let dataMeja = {
-    nomor_meja: request.body.nomor_meja,
-    status: request.body.status,
-  };
+exports.updateMeja = async (request, response, next) => {
+  try {
+    const models = [mejaModel];
+    const fields = ["nomor_meja"];
 
-  let idMeja = request.params.id_meja;
+    checkDuplicates(models, fields)(request, response, async () => {
+      const { nomor_meja, status } = request.body;
+      const idMeja = request.params.id_meja;
 
-  mejaModel
-    .update(dataMeja, { where: { id_meja: idMeja } })
-    .then((result) => {
-      return response.json({
+      const updatedMeja = await mejaModel.findByPk(idMeja);
+      if (!updatedMeja) {
+        return response.status(404).json({
+          success: false,
+          message: "Meja not found",
+        });
+      }
+
+      await updatedMeja.update({ nomor_meja, status });
+
+      response.status(201).json({
         success: true,
-        data: dataMeja,
-        message: "Data meja has been updated",
-      });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
+        data: { meja },
+        message: "Meja has been added",
       });
     });
-};
-
-exports.deleteMeja = (request, response) => {
-  let idMeja = request.params.id_meja;
-
-  mejaModel
-    .destroy({ where: { id_meja: idMeja } })
-    .then((result) => {
-      return response.json({
-        success: true,
-        message: "Data meja has been updated",
-      });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
     });
+  }
 };
+
+exports.deleteMeja = async (request, response) => {
+  const idMeja = request.params.id_meja;
+
+  try {
+    const meja = await mejaModel.findByPk(idMeja);
+    if (!meja) {
+      return response.status(404).json({
+        success: false,
+        message: "Meja not found",
+      });
+    }
+
+    await meja.destroy();
+
+    return response.status(200).json({
+      success: true,
+      message: "Meja deleted successfully",
+    });
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateStatusMeja = async (request, response) => {
+  const { nomor_meja, status } = request.body;
+
+  try {
+    const meja = await mejaModel.findOne({ where: { nomor_meja: nomor_meja } });
+
+    if (!meja) {
+      return response.status(404).json({
+        success: false,
+        message: "Meja not found",
+      });
+    }
+
+    if (status !== "tersedia" && status !== "tidak_tersedia") {
+      return response.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
+    }
+
+    meja.status = status;
+    await meja.save();
+
+    return response.status(200).json({
+      success: true,
+      message: `Meja ${nomor_meja} status updated to ${status}`,
+      data: meja,
+    });
+  } catch (err) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
+  }
+};
+
+
+
+exports.getAvailableMeja = async (request, response) => {
+  try {
+    const availableMeja = await mejaModel.findAll({
+      where: {
+        status: {
+          [Op.eq]: "tersedia",
+        },
+      },
+      attributes: { exclude: ["id_meja"] },
+    });
+    return response.status(200).json({
+      success: true,
+      data: availableMeja,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getStatusMeja = async (request, response) => {
+  const { nomor_meja } = request.body;
+  try {
+    const statusMeja = await mejaModel.findOne({
+      where: {
+        nomor_meja: nomor_meja,
+      },
+      attributes: { exclude: ["id_meja"] },
+    });
+    return response.status(200).json({
+      success: true,
+      data: statusMeja,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+

@@ -10,7 +10,7 @@ const verify = require("../middleware/verify");
 
 app.get(
   "/get",
-  verify.verifyRole("admin", "default"),
+  verify.verifyRole("admin", "managet"),
   userController.getAllUser
 );
 

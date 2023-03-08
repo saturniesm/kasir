@@ -8,12 +8,46 @@ const app = express();
 app.use(express.json());
 
 const mejaController = require("../controllers/meja.controller");
-app.get("/", mejaController.getAllMeja);
-app.get("/:id_meja", mejaController.getOneMeja);
-app.post("/add", mejaController.addMeja);
-app.post("/find", mejaController.findMeja);
-app.put("/:id_meja", mejaController.updateMeja);
-app.delete("/:id_meja", mejaController.deleteMeja);
+const verify = require("../middleware/verify").verifyRole;
 
-// export app in order to load in another file
+app.get("/get", verify("admin", "kasir"), mejaController.getAllMeja);
+
+app.get(
+  "/get/:id_meja",
+  verify("admin", "kasir"),
+  mejaController.getOneMeja
+);
+
+app.post("/add", verify("admin", "kasir"), mejaController.addMeja);
+
+app.put(
+  "/edit/:id_meja",
+  verify("admin", "kasir"),
+  mejaController.updateMeja
+);
+
+app.delete(
+  "/delete/:id_meja",
+  verify("admin", "kasir"),
+  mejaController.deleteMeja
+);
+
+app.put(
+  "/edit-status/:id_meja",
+  verify("admin", "kasir"),
+  mejaController.updateStatusMeja
+);
+
+app.get(
+  "/meja-tersedia",
+  verify("admin", "kasir"),
+  mejaController.getAvailableMeja
+);
+
+app.post(
+  "/status-meja",
+  verify("admin", "kasir"),
+  mejaController.getStatusMeja
+);
+
 module.exports = app;
