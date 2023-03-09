@@ -99,7 +99,7 @@ exports.updateMeja = async (request, response, next) => {
 
       response.status(201).json({
         success: true,
-        data: { meja },
+        data: { updatedMeja },
         message: "Meja has been added",
       });
     });
