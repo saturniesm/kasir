@@ -11,7 +11,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c
 ### INSERT MENU
 POST http://localhost:8080/menu/add HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="gambar"; filename="example.png"
+Content-Type: image/png
+
+{{READFILE "path/to/image.png"}}
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="data"
 
 {
     "nama_menu":"ayam goyeng",
@@ -19,7 +28,7 @@ Content-Type: application/json
     "deskripsi": "Lejat dan bergiji",
     "harga": 12000
 }
-
+----WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ### FIND MENU BY KEYWORD
 POST http://localhost:8080/menu/nama-menu/1 HTTP/1.1
@@ -35,10 +44,12 @@ PUT http://localhost:8080/menu/1 HTTP/1.1
 Content-Type: application/json
 
 {
-    "nomor_MENU":23,
+    "nomor_menu":23,
     "status":"tidak_tersedia"
 }
 
 
-###DELETE USER
-DELETE  http://localhost:8080/menu/1 HTTP/1.1
+###DELETE MENU
+DELETE  http://localhost:8080/menu/delete/5 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+

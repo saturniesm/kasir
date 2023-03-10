@@ -28,7 +28,6 @@ GET http://localhost:8080/auth/token HTTP/1.1
 Content-Type: application/json
 
 
-
 ### Ganti Email
 POST http://localhost:8080/auth/reset-email/2 HTTP/1.1
 Content-Type: application/json

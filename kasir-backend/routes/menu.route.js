@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 const menuController = require("../controllers/menu.controller");
-const { upload } = require("../middleware/uploudFile");
+const upload = require("../middleware/uploudFile").upload;
 const verify = require("../middleware/verify").verifyRole;
 
 app.get("/get", verify("admin"), menuController.getAllMenu);

@@ -11,6 +11,7 @@ const PORT = process.env.APP_PORT;
 app.use(cors());
 app.use(cookieParser());
 
+const transaksiRoute = require(`./routes/transaksi.route`);
 const userRoute = require(`./routes/user.route`);
 const mejaRoute = require("./routes/meja.route");
 const menuRoute = require("./routes/menu.route");
@@ -21,6 +22,7 @@ app.use(middleware.verifyAuth);
 app.use(`/user`, userRoute);
 app.use(`/meja`, mejaRoute);
 app.use(`/menu`, menuRoute);
+app.use(`/transaksi`, transaksiRoute);
 
 app.use(express.static(__dirname));
 

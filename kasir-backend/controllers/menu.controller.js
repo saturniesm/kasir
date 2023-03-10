@@ -58,9 +58,12 @@ exports.updateMenu = async (request, response) => {
       const { nama_menu, jenis, deskripsi, harga } = request.body;
       const selectedMenu = await menuModel.findOne({ where: { id_menu } });
 
+
       if (!selectedMenu) {
         return response.json({ message: "Menu not found" });
       }
+
+      console.log(request.body)
 
       let menu = { nama_menu, jenis, deskripsi, harga };
 
@@ -80,9 +83,12 @@ exports.updateMenu = async (request, response) => {
         menu.gambar = request.file.filename;
       }
 
-      const result = await menuModel.update(menu, { where: { id_menu } });
+      console.log(menu)
+      const result = await menuModel.update(menu, {
+        where: { id_menu: request.params.id_menu },
+      });
 
-      if (result[0]) {
+      if (result) {
         return response.json({
           success: true,
           message: "Data menu has been updated",
@@ -101,6 +107,7 @@ exports.updateMenu = async (request, response) => {
 };
 
 exports.addMenu = async (request, response, next) => {
+  console.log(request.file)
   try {
     const models = [menuModel];
     const fields = ["nama_menu"];
@@ -110,7 +117,11 @@ exports.addMenu = async (request, response, next) => {
     checkDuplicates(models, fields)(request, response, () => {
       validateRequiredFields(request, response, async () => {
         const { nama_menu, jenis, deskripsi, harga } = request.body;
-        const { gambar } = request.file.filename;
+        const  gambar  = request.file.filename;
+        
+        if (!gambar) {
+          return response.status(400).json({ message: "Missing required fields gambar" });
+        }
 
         const menu = await menuModel.create({
           nama_menu,
@@ -140,6 +151,8 @@ exports.deleteMenu = async (req, res) => {
   try {
     const { id_menu } = req.params;
 
+    console.log(id_menu)
+
     const selectedMenu = await menuModel.findByPk(id_menu);
 
     if (!selectedMenu) {
@@ -160,9 +173,9 @@ exports.deleteMenu = async (req, res) => {
       where: { id_menu },
     });
 
-    response.status(200).json({
+    res.status(200).json({
       success: true,
-      data: menu,
+      data: selectedMenu,
       message: "Menu deleted successfully",
     });
   } catch (error) {

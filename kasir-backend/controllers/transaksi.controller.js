@@ -46,6 +46,7 @@ exports.addTransaksi = async (request, response) => {
     });
 };
 
+
 exports.updateTransaksi = async (request, response) => {
   let newData = {
     tgl_transaksi: request.body.tgl_transaksi,
@@ -127,12 +128,11 @@ exports.createPayment = async (request, response) => {
   const params = {
     id_transaksi: request.params.id_transaksi,
   };
-  const transaksinya = await transaksiModel.findOne({
+  const transaksi = await transaksiModel.findOne({
     attributes: ["id_meja"],
     where: params,
   });
-  let mejaID = transaksinya.id_meja;
-  console.log("Ini Error apa", mejaID);
+  let mejaID = transaksi.id_meja;
   mejaModel
     .update({ status: "tersedia" }, { where: { id_meja: mejaID } })
     .then(async (result) => {

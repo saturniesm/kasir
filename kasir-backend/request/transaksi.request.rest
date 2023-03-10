@@ -1,0 +1,35 @@
+### INSERT TRANSAKSI
+POST http://localhost:8080/transaksi HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Content-Type: application/json
+
+{
+    "tgl_transaksi": "2023-01-30",
+    "id_user": 2,
+    "id_meja": 3,
+    "nama_pelanggan": "yanti",
+    "status": "belum_bayar",
+    "detail_transaksi":[
+        { "id_menu": "3"}, {"id_menu": "6"}]
+}
+
+### EDIT TRANSAKSI
+PUT  http://localhost:8080/transaksi/edit/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Content-Type: application/json
+
+{
+    "tgl_transaksi": "2023-01-30",
+    "id_user": 2,
+    "id_meja": 3,
+    "nama_pelanggan": "YANTO",
+    "status": "belum_bayar",
+    "detail_transaksi":[
+        { "id_menu": "3"}, {"id_menu": "6"}]
+}
+
+### BAYAR
+PUT  http://localhost:8080/transaksi/pay/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+
+
