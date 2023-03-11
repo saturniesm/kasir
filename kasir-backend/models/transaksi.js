@@ -4,8 +4,14 @@ module.exports = (sequelize, DataTypes) => {
   class transaksi extends Model {
     static associate(models) {
       // define association here
-      this.belongsTo(models.user);
-      this.belongsTo(models.meja);
+      this.belongsTo(models.user, {
+        foreignKey: "id_user",
+        onDelete: "CASCADE", // Add this line to enable delete on cascade
+      });
+      this.belongsTo(models.meja, {
+        foreignKey: "id_meja",
+        onDelete: "CASCADE", // Add this line to enable delete on cascade
+      });
       this.hasMany(models.detail_transaksi, {
         foreignKey: "id_transaksi",
         as: "detail_transaksi",
@@ -27,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "user",
           key: "id_user",
         },
+        onDelete: "CASCADE",
       },
       id_meja: {
         type: Sequelize.INTEGER,
@@ -35,9 +42,11 @@ module.exports = (sequelize, DataTypes) => {
           model: "meja",
           key: "id_meja",
         },
+        onDelete: "CASCADE",
       },
       nama_pelanggan: DataTypes.STRING,
       status: DataTypes.STRING,
+      total: DataTypes.INTEGER,
     },
     {
       sequelize,

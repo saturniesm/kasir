@@ -1,35 +1,61 @@
-### INSERT TRANSAKSI
-POST http://localhost:8080/transaksi HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+### INSERT TRANSAKSI --NOTE
+POST http://localhost:8080/transaksi/add HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIiLCJpYXQiOjE2Nzg1MjQ3OTEsImV4cCI6MTY4MDIwMzMxNjI0NX0.g-jbJqjXm8kuTlg9a0AlTXh03dAGSaDg5pwOaNi-WD0
 Content-Type: application/json
 
 {
-    "tgl_transaksi": "2023-01-30",
-    "id_user": 2,
-    "id_meja": 3,
+    "id_meja": 4,
     "nama_pelanggan": "yanti",
-    "status": "belum_bayar",
     "detail_transaksi":[
-        { "id_menu": "3"}, {"id_menu": "6"}]
+        { 
+            "id_menu": "2",
+            "qty" : 3
+        },
+        { 
+            "id_menu": "2",
+            "qty" : 10
+        }
+    ]
 }
 
 ### EDIT TRANSAKSI
-PUT  http://localhost:8080/transaksi/edit/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+PUT  http://localhost:8080/transaksi/edit/10 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIiLCJpYXQiOjE2Nzg1MjQ3OTEsImV4cCI6MTY4MDIwMzMxNjI0NX0.g-jbJqjXm8kuTlg9a0AlTXh03dAGSaDg5pwOaNi-WD0
 Content-Type: application/json
 
 {
-    "tgl_transaksi": "2023-01-30",
-    "id_user": 2,
-    "id_meja": 3,
-    "nama_pelanggan": "YANTO",
-    "status": "belum_bayar",
+    "id_meja": 4,
+    "nama_pelanggan": "yanti",
     "detail_transaksi":[
-        { "id_menu": "3"}, {"id_menu": "6"}]
+        { 
+            "id_menu": "2",
+            "qty" : 5
+        },
+        { 
+            "id_menu": "2",
+            "qty" : 10
+        }
+    ]
 }
 
 ### BAYAR
-PUT  http://localhost:8080/transaksi/pay/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+PUT  http://localhost:8080/transaksi/pay/20 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
 
 
+### TRANSAKSI BY KASIR
+GET http://localhost:8080/transaksi/transaksi-kasir HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+
+
+### GET ALL TRANSAKSI
+GET http://localhost:8080/transaksi/get HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+
+###
+GET http://localhost:8080/transaksi/list-menu HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+
+###
+GET http://localhost:8080/transaksi/transaksi-harian HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74

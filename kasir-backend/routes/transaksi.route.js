@@ -6,14 +6,14 @@ app.use(express.json());
 const transaksiController = require("../controllers/transaksi.controller");
 const verify = require("../middleware/verify").verifyRole;
 
-app.post(
-  "/",
+app.get(
+  "/get",
   verify("admin", "kasir", "manager"),
-  transaksiController.addTransaksi
+  transaksiController.getAllTransaksi
 );
 
 app.put(
-  "/edit/:id",
+  "/edit/:id_transaksi",
   verify("admin", "kasir", "manager"),
   transaksiController.updateTransaksi
 );
@@ -31,9 +31,40 @@ app.delete(
 );
 
 app.get(
-  "/get/:id_transaksi",
+  "/transaksi-kasir",
   verify("admin", "kasir", "manager"),
-  transaksiController.findOneTransaksi
+  transaksiController.getTransaksiByKasir
 );
+
+app.get(
+  "/fav-menu",
+  verify("admin", "kasir", "manager"),
+  transaksiController.getmostFavoriteProduct
+);
+
+app.get(
+  "/list-menu",
+  verify("admin", "kasir", "manager"),
+  transaksiController.getListFavoriteProduct
+);
+
+app.get(
+  "/transaksi-harian",
+  verify("admin", "kasir", "manager"),
+  transaksiController.getDailyTransaksi
+);
+
+app.get(
+  "/transaksi-bulanan",
+  verify("admin", "kasir", "manager"),
+  transaksiController.getMonthlyTransaksi
+);
+
+app.get(
+  "/transaksi-tahunan",
+  verify("admin", "kasir", "manager"),
+  transaksiController.getYearlyTransaksi
+);
+
 
 module.exports = app;

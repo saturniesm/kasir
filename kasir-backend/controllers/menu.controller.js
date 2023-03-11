@@ -29,7 +29,11 @@ exports.getAllMenu = async (request, response) => {
       message: "All menus have been loaded",
     });
   } catch (error) {
-    response.status(500).json({ message: "Server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
@@ -44,7 +48,11 @@ exports.getOneMenu = async (request, response) => {
       .status(200)
       .json({ success: true, data: menu, message: "menu has been loaded" });
   } catch (error) {
-    response.status(500).json({ message: "Server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
@@ -58,12 +66,9 @@ exports.updateMenu = async (request, response) => {
       const { nama_menu, jenis, deskripsi, harga } = request.body;
       const selectedMenu = await menuModel.findOne({ where: { id_menu } });
 
-
       if (!selectedMenu) {
         return response.json({ message: "Menu not found" });
       }
-
-      console.log(request.body)
 
       let menu = { nama_menu, jenis, deskripsi, harga };
 
@@ -83,7 +88,6 @@ exports.updateMenu = async (request, response) => {
         menu.gambar = request.file.filename;
       }
 
-      console.log(menu)
       const result = await menuModel.update(menu, {
         where: { id_menu: request.params.id_menu },
       });
@@ -107,7 +111,6 @@ exports.updateMenu = async (request, response) => {
 };
 
 exports.addMenu = async (request, response, next) => {
-  console.log(request.file)
   try {
     const models = [menuModel];
     const fields = ["nama_menu"];
@@ -117,10 +120,12 @@ exports.addMenu = async (request, response, next) => {
     checkDuplicates(models, fields)(request, response, () => {
       validateRequiredFields(request, response, async () => {
         const { nama_menu, jenis, deskripsi, harga } = request.body;
-        const  gambar  = request.file.filename;
-        
+        const gambar = request.file.filename;
+
         if (!gambar) {
-          return response.status(400).json({ message: "Missing required fields gambar" });
+          return response
+            .status(400)
+            .json({ message: "Missing required fields gambar" });
         }
 
         const menu = await menuModel.create({
@@ -151,8 +156,6 @@ exports.deleteMenu = async (req, res) => {
   try {
     const { id_menu } = req.params;
 
-    console.log(id_menu)
-
     const selectedMenu = await menuModel.findByPk(id_menu);
 
     if (!selectedMenu) {
@@ -164,6 +167,8 @@ exports.deleteMenu = async (req, res) => {
       "../images/menu",
       selectedMenu.gambar
     );
+
+    console.log(pathGambar);
 
     if (fs.existsSync(pathGambar)) {
       fs.unlinkSync(pathGambar);
@@ -180,13 +185,17 @@ exports.deleteMenu = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
 exports.getMenuByName = async (request, response) => {
   try {
-    const { name } = request.query;
+    const { q: name } = request.query;
 
     const filteredMenu = await menuModel.findAll({
       where: {
@@ -196,10 +205,11 @@ exports.getMenuByName = async (request, response) => {
 
     return response.status(200).json({ success: true, data: filteredMenu });
   } catch (error) {
-    console.error(error);
-    return response
-      .status(500)
-      .json({ success: false, message: "Server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
@@ -208,7 +218,7 @@ exports.filterByCategory = async (req, res) => {
     const { jenis } = req.params;
     const menus = await menuModel.findAll({
       where: {
-        kategori: {
+        jenis: {
           [Op.eq]: jenis,
         },
       },
@@ -217,11 +227,16 @@ exports.filterByCategory = async (req, res) => {
     if (!menus) {
       return response.status(404).json({ message: "Jenis menu not found" });
     }
-    return res.status(200)
-      .json({ success: true, data: menus, message: "Jenis menus have been loaded" });
+    return res.status(200).json({
+      success: true,
+      data: menus,
+      message: "Jenis menus have been loaded",
+    });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+        response.status(500).json({
+          success: false,
+          message: "Server error",
+          error: error.message,
+        });
   }
 };
-

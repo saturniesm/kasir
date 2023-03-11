@@ -14,10 +14,11 @@ module.exports = {
       },
       id_user: {
         type: Sequelize.INTEGER,
-
+        allowNull: false,
         references: {
           model: "user",
           key: "id_user",
+          onDelete: "CASCADE",
         },
       },
       id_meja: {
@@ -25,6 +26,7 @@ module.exports = {
         references: {
           model: "meja",
           key: "id_meja",
+          onDelete: "CASCADE",
         },
       },
       nama_pelanggan: {
@@ -32,6 +34,9 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM("belum_bayar", "lunas"),
+      },
+      total: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

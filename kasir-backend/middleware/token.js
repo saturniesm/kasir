@@ -9,10 +9,11 @@ exports.generateAccessToken = (user) => {
 }
 
 exports.generateRefreshToken = (user) => {
-  const expirationTime = Date.now() + parseInt(process.env.JWT_REFRESH_EXPIRATION);
+  const expirationTime =
+    Date.now() + parseInt(process.env.JWT_REFRESH_EXPIRATION);
   return jwt.sign(
-    { username: user.username, email: user.email, role: user.role },
+    { id_user: user.id_user, username: user.username, email: user.email, role: user.role },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: expirationTime }
-  )
-}
+  );
+};

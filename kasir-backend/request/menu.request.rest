@@ -1,55 +1,20 @@
 # GET MENU
 GET  http://localhost:8080/menu/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
 
 ### GET MENU BY ID
-GET  http://localhost:8080/menu/get/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+GET  http://localhost:8080/menu/get/3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
 
+### FIND MENU BY KEYWORD 
+GET http://localhost:8080/menu/nama-menu?q=ikan HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
 
-### INSERT MENU
-POST http://localhost:8080/menu/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+### FIND MENU BY JENIS
+GET http://localhost:8080/menu/jenis-menu/makanan HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
 
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="gambar"; filename="example.png"
-Content-Type: image/png
-
-{{READFILE "path/to/image.png"}}
-
-----WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="data"
-
-{
-    "nama_menu":"ayam goyeng",
-    "jenis": "makanan",
-    "deskripsi": "Lejat dan bergiji",
-    "harga": 12000
-}
-----WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-### FIND MENU BY KEYWORD
-POST http://localhost:8080/menu/nama-menu/1 HTTP/1.1
-Content-Type: application/json
-
-{
-    "keyword": "tersedia"
-}
-
-
-### EDIT MENU
-PUT http://localhost:8080/menu/1 HTTP/1.1
-Content-Type: application/json
-
-{
-    "nomor_menu":23,
-    "status":"tidak_tersedia"
-}
-
-
-###DELETE MENU
-DELETE  http://localhost:8080/menu/delete/5 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+###DELETE MENU --NOTE
+DELETE  http://localhost:8080/menu/delete/3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
 

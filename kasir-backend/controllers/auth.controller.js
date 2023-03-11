@@ -42,7 +42,12 @@ exports.register = async (request, response, next) => {
             password: hashPassword,
           });
 
-          const accessToken = generateAccessToken({ username, email, role });
+          const accessToken = generateAccessToken({
+            id_user: user.id_user,
+            username,
+            email,
+            role,
+          });
 
           response.status(201).json({
             success: true,
@@ -87,9 +92,19 @@ exports.login = async (request, response) => {
         }
 
         const { username, email: userEmail, role } = user;
-        const accessToken = generateAccessToken({ username, email, role });
+        const accessToken = generateAccessToken({
+          id_user: user.id_user,
+          username,
+          email,
+          role,
+        });
 
-        const userInfo = { username, email: userEmail, role };
+        const userInfo = {
+          id_user: user.id_user,
+          username,
+          email: userEmail,
+          role,
+        };
         const refreshToken = generateRefreshToken(userInfo);
 
         await userModel.update(

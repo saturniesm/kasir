@@ -34,7 +34,11 @@ exports.getAllUser = async (request, response) => {
       message: "All users have been loaded",
     });
   } catch (error) {
-    response.status(500).json({ message: "Server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
@@ -51,7 +55,11 @@ exports.getOneUser = async (request, response) => {
       .status(200)
       .json({ success: true, data: user, message: "User has been loaded" });
   } catch (error) {
-    response.status(500).json({ message: "Server error" });
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 
@@ -112,7 +120,12 @@ exports.addUser = async (request, response, next) => {
               password: hashPassword,
             });
 
-            const accessToken = generateAccessToken({ username, email, role });
+            const accessToken = generateAccessToken({
+              id_user: user.id_user,
+              username,
+              email,
+              role,
+            });
 
             response.status(201).json({
               success: true,
@@ -143,11 +156,7 @@ exports.updateUser = async (request, response) => {
     const models = [userModel, userModel];
     const fields = ["email", "username"];
 
-    request.requiredFields = [
-      "nama_user",
-      "username",
-      "email",
-    ];
+    request.requiredFields = ["nama_user", "username", "email"];
 
     const { nama_user, role, username, email, password } = request.body;
 
@@ -183,7 +192,6 @@ exports.updateUser = async (request, response) => {
             },
             message: "User has been updated",
           });
-          
         });
       });
     });
@@ -195,7 +203,6 @@ exports.updateUser = async (request, response) => {
     });
   }
 };
-
 
 exports.updateUserRole = async (req, res) => {
   try {

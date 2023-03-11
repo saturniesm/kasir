@@ -1,197 +1,443 @@
 const transaksiModel = require("../models/index").transaksi;
 const detailTransaksiModel = require("../models/index").detail_transaksi;
 const mejaModel = require("../models/index").meja;
+const menuModel = require("../models/index").menu;
 const Op = require("sequelize").Op;
+const { validateRequiredFields } = require("../middleware/validation");
+const sequelize = require("../sequelize");
 
-exports.addTransaksi = async (request, response) => {
-  let newData = {
-    tgl_transaksi: request.body.tgl_transaksi,
-    id_user: request.body.id_user,
-    id_meja: request.body.id_meja,
-    nama_pelanggan: request.body.nama_pelanggan,
-    status: request.body.status,
-  };
-
-  transaksiModel
-    .create(newData)
-    .then((result) => {
-      let transaksiID = result.id_transaksi;
-      let detailTransaksi = request.body.detail_transaksi;
-
-      for (let i = 0; i < detailTransaksi.length; i++) {
-        detailTransaksi[i].id_transaksi = transaksiID;
-      }
-      console.log(detailTransaksi);
-      detailTransaksiModel
-        .bulkCreate(detailTransaksi)
-        .then((result) => {
-          return response.json({
-            success: true,
-            message:
-              "New transaction and transaction details has been inserted",
-          });
-        })
-        .catch((error) => {
-          return response.json({
-            success: false,
-            message: error.message,
-          });
-        });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
-    });
-};
-
-
-exports.updateTransaksi = async (request, response) => {
-  let newData = {
-    tgl_transaksi: request.body.tgl_transaksi,
-    id_user: request.body.id_user,
-    id_meja: request.body.id_meja,
-    nama_pelanggan: request.body.nama_pelanggan,
-    status: request.body.status,
-  };
-
-  let transaksiID = request.params.id;
-
-  transaksiModel
-    .update(newData, { where: { id_transaksi: transaksiID } })
-    .then(async (result) => {
-      await detailTransaksiModel.destroy({
-        where: { id_transaksi: transaksiID },
-      });
-
-      let detailTransaksi = request.body.detail_transaksi;
-
-      for (let i = 0; i < detailTransaksi.length; i++) {
-        detailTransaksi[i].id_transaksi = transaksiID;
-      }
-      console.log(detailTransaksi);
-
-      detailTransaksiModel
-        .bulkCreate(detailTransaksi)
-        .then((result) => {
-          return response.json({
-            success: true,
-            message: "New transaction has been updated",
-          });
-        })
-        .catch((error) => {
-          return response.json({
-            success: false,
-            message: error.message,
-          });
-        });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
-    });
-};
-
-exports.deleteTransaksi = async (request, response) => {
-  let transaksiID = request.params.id;
-
-  detailTransaksiModel
-    .destroy({ where: { id_transaksi: transaksiID } })
-    .then((result) => {
-      transaksiModel
-        .destroy({ where: { id_transaksi: transaksiID } })
-        .then((result) => {
-          return response.json({
-            success: true,
-            message: ` transaction has deleted`,
-          });
-        })
-        .catch((error) => {
-          return response.json({
-            success: false,
-            message: error.message,
-          });
-        });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
-    });
-};
-
-exports.createPayment = async (request, response) => {
-  const params = {
-    id_transaksi: request.params.id_transaksi,
-  };
-  const transaksi = await transaksiModel.findOne({
-    attributes: ["id_meja"],
-    where: params,
-  });
-  let mejaID = transaksi.id_meja;
-  mejaModel
-    .update({ status: "tersedia" }, { where: { id_meja: mejaID } })
-    .then(async (result) => {
-      transaksiModel
-        .update({ status: "lunas" }, { where: params })
-        .then((result) => {
-          return response.json({
-            success: true,
-            message: "Payment success and table/transaction status updated",
-          });
-        })
-        .catch((error) => {
-          return response.json({
-            success: false,
-            message: error.message,
-          });
-        });
-    })
-    .catch((error) => {
-      return response.json({
-        success: false,
-        message: error.message,
-      });
-    });
-};
-
-exports.findOneTransaksi = async (req, res) => {
+// STATUS MEJA AUTO TIDAK TERSEDIA
+// CEK APAKAH MEJA TERSEDIA APA GAK
+exports.createTransaksi = async (request, response) => {
   try {
-    const params = {
-      id_transaksi: req.params.id_transaksi,
-    };
+    request.requiredFields = ["id_meja", "nama_pelanggan", "detail_transaksi"];
 
-    const result = await transaksiModel.findOne({
-      attributes: ["id_meja"],
-      where: params,
+    validateRequiredFields(request, response, async () => {
+      const { id_meja, nama_pelanggan, detail_transaksi } = request.body;
+      const id_user = request.user.id_user;
+      const status = "belum_bayar";
+
+      const totalPrice = await Promise.all(
+        detail_transaksi.map(async (detail) => {
+          const menu = await menuModel.findOne({
+            where: { id_menu: detail.id_menu },
+          });
+          return menu.harga * detail.qty;
+        })
+      ).then((prices) => prices.reduce((sum, price) => sum + price, 0));
+
+      const transaksi = await transaksiModel.create(
+        {
+          id_user,
+          id_meja,
+          nama_pelanggan,
+          status,
+          total: totalPrice,
+          detail_transaksi: detail_transaksi.map((detail) => ({ ...detail })),
+        },
+        {
+          include: {
+            model: detailTransaksiModel,
+            as: "detail_transaksi",
+          },
+        }
+      );
+
+      response.status(201).json({
+        success: true,
+        data: transaksi,
+        message: "Transaksi has been added",
+      });
     });
-    return res.json({
-      success: true,
-      data: result,
-      code: 200,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.json({
+  } catch (error) {
+    response.status(500).json({
       success: false,
-      code: 500,
+      message: "Server error",
+      error: error.message,
     });
   }
 };
 
+exports.updateTransaksi = async (request, response) => {
+  try {
+    request.requiredFields = ["id_meja", "nama_pelanggan", "detail_transaksi"];
+    validateRequiredFields(request, response, async () => {
+      const { id_meja, nama_pelanggan, status, detail_transaksi } =
+        request.body;
+      const { id_transaksi } = request.params;
+      const id_user = request.user.id_user;
 
-// TODO riset apakah perlu dibuat tiga controller yang berbeda untuk transaksi harian, tanggal, dan juga bulanan
-// TODO controller khusus filter yang nanti input nama
-// TODO controller berdasarkan tanggal
-// TODO controller berdasarkan bulanan dan harian 
-// TODO controller laporan transaksi
-// TODO controller statistic
+      const checkTransaksi = await transaksiModel.findByPk(id_transaksi, {
+        include: {
+          model: detailTransaksiModel,
+          as: "detail_transaksi",
+        },
+      });
 
+      if (!checkTransaksi) {
+        return response.status(404).json({
+          success: false,
+          message: "Transaction not found",
+        });
+      }
 
+      const totalPrice = await Promise.all(
+        detail_transaksi.map(async (detail) => {
+          const menu = await menuModel.findOne({
+            where: { id_menu: detail.id_menu },
+          });
+          return menu.harga * detail.qty;
+        })
+      ).then((prices) => prices.reduce((sum, price) => sum + price, 0));
 
+      const transaksi = await transaksiModel.update(
+        {
+          id_user,
+          id_meja,
+          nama_pelanggan,
+          status,
+          total: totalPrice,
+          detail_transaksi: detail_transaksi.map((detail) => ({ ...detail })),
+        },
+        {
+          where: {
+            id_transaksi: id_transaksi,
+          },
+          returning: true,
+          include: {
+            model: detailTransaksiModel,
+            as: "detail_transaksi",
+          },
+        }
+      );
 
+      response.status(201).json({
+        success: true,
+        data: transaksi,
+        message: "Transaksi has been updated",
+      });
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.deleteTransaksi = async (request, response) => {
+  try {
+    const id_transaksi = request.params.id;
+
+    const checkTransaksi = await transaksiModel.findByPk(id_transaksi, {
+      include: {
+        model: detailTransaksiModel,
+        as: "detail_transaksi",
+      },
+    });
+
+    if (!checkTransaksi) {
+      return response.status(404).json({
+        success: false,
+        message: "Transaction not found",
+      });
+    }
+
+    await detailTransaksiModel.destroy({
+      where: { id_transaksi: id_transaksi },
+    });
+    await transaksiModel.destroy({ where: { id_transaksi: id_transaksi } });
+
+    return response.json({
+      success: true,
+      message: `Transaction with ID ${id_transaksi} and its associated details have been deleted.`,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// MASI ERROR
+exports.createPayment = async (request, response) => {
+  try {
+    const { id_transaksi } = request.params;
+
+    const checkTransaksi = await transaksiModel.findByPk(id_transaksi, {
+      include: {
+        model: detailTransaksiModel,
+        as: "detail_transaksi",
+      },
+    });
+
+    if (!checkTransaksi) {
+      return response.status(404).json({
+        success: false,
+        message: "Transaction not found",
+      });
+    }
+
+    const result = await sequelize.transaction(async (t) => {
+      const transaksi = await transaksiModel.update(
+        { status: "lunas" },
+        {
+          where: { id_transaksi: id_transaksi },
+          returning: true,
+          plain: true,
+          include: [
+            {
+              model: mejaModel,
+              as: "meja",
+              where: { id_meja: sequelize.col("transaksi.id_meja") },
+            },
+          ],
+          transaction: t,
+        }
+      );
+
+      const meja = await mejaModel.update(
+        { status: "tersedia" },
+        {
+          where: { id_meja: transaksi[0].meja.id_meja },
+          transaction: t,
+        }
+      );
+
+      return transaksi;
+    });
+
+    return response.json({
+      success: true,
+      message: "Payment success and table/transaction status updated",
+    });
+  } catch (err) {
+    console.log(err);
+    return response.status(500).json({
+      success: false,
+      message: "Error occurred during payment and status update",
+    });
+  }
+};
+
+exports.getTransaksiByKasir = async (request, response) => {
+  try {
+    const id_user = request.user.id_user;
+    const username = request.user.username;
+
+    const getTransaksi = await transaksiModel.findAll({
+      where: {
+        id_user: id_user,
+      },
+      include: {
+        model: detailTransaksiModel,
+        as: "detail_transaksi",
+      },
+    });
+    response.status(200).json({
+      success: true,
+      data: getTransaksi,
+      message: `Transaction from ${username} has been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getAllTransaksi = async (request, response) => {
+  try {
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await transaksiModel.findAndCountAll({
+      offset,
+      limit,
+      include: {
+        model: detailTransaksiModel,
+        as: "detail_transaksi",
+      },
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    response.status(200).json({
+      success: true,
+      data: rows,
+      total_pages: totalPages,
+      current_page: page,
+      message: "All transaksis have been loaded",
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getmostFavoriteProduct = async (request, response) => {
+  try {
+    const favoriteMenus = await detailTransaksiModel.findAll({
+      attributes: [
+        [sequelize.literal("menu.nama_menu"), "nama_menu"],
+        [
+          sequelize.fn("SUM", sequelize.col("detail_transaksi.qty")),
+          "total_qty",
+        ],
+      ],
+      include: [
+        {
+          model: menuModel,
+          as: "menu",
+          attributes: [],
+        },
+      ],
+      group: ["menu.id_menu"],
+      order: [[sequelize.literal("total_qty"), "DESC"]],
+    });
+
+    response.status(200).json({
+      success: true,
+      data: favoriteMenus,
+      message: `Costumer's favorite menu has been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getListFavoriteProduct = async (request, response) => {
+  try {
+    const favoriteMenus = await detailTransaksiModel.findAll({
+      attributes: [
+        [sequelize.literal("menu.nama_menu"), "nama_menu"],
+        [
+          sequelize.fn("SUM", sequelize.col("detail_transaksi.qty")),
+          "total_qty",
+        ],
+      ],
+      include: [
+        {
+          model: menuModel,
+          as: "menu",
+          attributes: ["id_menu", "nama_menu"],
+        },
+      ],
+      order: [[sequelize.literal("total_qty"), "DESC"]],
+      group: ["menu.id_menu"],
+    });
+
+    response.status(200).json({
+      success: true,
+      data: favoriteMenus,
+      message: `Costumer's favorite menus has been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+// CHECK MARIA DB DATE
+exports.getDailyTransaksi = async (request, response) => {
+  try {
+    const dailyTransactions = await transaksiModel.findAll({
+      where: {
+        tgl_transaksi: {
+          [Op.between]: [
+            sequelize.literal(`DATE_TRUNC('day', NOW())`),
+            sequelize.literal(
+              `DATE_TRUNC('day', NOW()) + INTERVAL '1 day' - INTERVAL '1 second'`
+            ),
+          ],
+        },
+      },
+    });
+
+    response.status(200).json({
+      success: true,
+      data: dailyTransactions,
+      message: `Daily transactions have been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getMonthlyTransaksi = async (request, response) => {
+  try {
+    const montlyTransactions = await transaksiModel.findAll({
+      where: {
+        tgl_transaksi: {
+          [Op.between]: [
+            sequelize.literal(`DATE_TRUNC('month', NOW())`),
+            sequelize.literal(
+              `DATE_TRUNC('month', NOW()) + INTERVAL '1 month' - INTERVAL '1 second'`
+            ),
+          ],
+        },
+      },
+    });
+
+    response.status(200).json({
+      success: true,
+      data: montlyTransactions,
+      message: `Monthly transactions have been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getYearlyTransaksi = async (request, response) => {
+  try {
+    const transactions = await transaksiModel.findAll({
+      where: {
+        tgl_transaksi: {
+          [Op.between]: [
+            sequelize.literal(`DATE_TRUNC('year', NOW())`),
+            sequelize.literal(
+              `DATE_TRUNC('year', NOW()) + INTERVAL '1 year' - INTERVAL '1 second'`
+            ),
+          ],
+        },
+      },
+    });
+
+    response.status(200).json({
+      success: true,
+      data: transactions,
+      message: `Yearly transactions have been loaded.`,
+    });
+  } catch (error) {
+    response.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
 

@@ -9,8 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.transaksi);
-      this.belongsTo(models.menu);
+      this.belongsTo(models.transaksi, {
+        foreignKey: "id_transaksi",
+        onDelete: "CASCADE", // Add this line to enable delete on cascade
+      });
+      this.belongsTo(models.menu, {
+        foreignKey: "id_menu",
+        onDelete: "CASCADE",
+      });
     }
   }
   detail_transaksi.init(
@@ -27,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "transaksi",
           key: "id_transaksi",
         },
+        onDelete: "CASCADE",
       },
       id_menu: {
         type: Sequelize.INTEGER,
@@ -35,9 +42,10 @@ module.exports = (sequelize, DataTypes) => {
           model: "menu",
           key: "id_menu",
         },
+        onDelete: "CASCADE",
       },
-      harga: {
-        type: Sequelize.STRING,
+      qty: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
     },

@@ -18,7 +18,12 @@ app.post(
   menuController.addMenu
 );
 
-app.put("/edit/:id_menu", verify("admin"), menuController.updateMenu);
+app.put(
+  "/edit/:id_menu",
+  upload.single("gambar"),
+  verify("admin"),
+  menuController.updateMenu
+);
 
 app.delete("/delete/:id_menu", verify("admin"), menuController.deleteMenu);
 

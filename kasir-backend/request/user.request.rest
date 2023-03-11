@@ -1,33 +1,33 @@
 # GET USER
 GET  http://localhost:8080/user/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 
 ###
 GET  http://localhost:8080/user/get/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 
 
 ### INSERT USER
 POST http://localhost:8080/user/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 Content-Type: application/json
 
 {
     "nama_user": "coba", 
     "role": "default",
-    "username": "coba", 
-    "email": "coba@example.com", 
+    "username": "apaja", 
+    "email": "apaaja@example.com", 
     "password": "Password123#", 
     "confPassword": "Password123#"
 }
 
 ### FIND USER BY KEYWORD
 GET http://localhost:8080/user/search-user?q=@example.com HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 
 ### EDIT USER
-PUT http://localhost:8080/user/edit/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+PUT http://localhost:8080/user/edit/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 Content-Type: application/json
 
 {
@@ -38,16 +38,16 @@ Content-Type: application/json
 }
 
 ### EDIT USER ROLE
-PUT http://localhost:8080/user/update-role/4 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+PUT http://localhost:8080/user/update-role/7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 Content-Type: application/json
 
 {
-    "role": "admin"
+    "role": "kasir"
 }
 
 
 ###DELETE USER
-DELETE  http://localhost:8080/user/delete/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NzgyNjg1MzAsImV4cCI6MTY3OTk0Njc5OTE1NH0.85RaXOo9btIwD0C8EITXqu9imfE3VJKRo9f6miXOnSM
+DELETE  http://localhost:8080/user/delete/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
 

@@ -14,6 +14,7 @@ module.exports = {
         references: {
           model: "transaksi",
           key: "id_transaksi",
+          onDelete: "CASCADE",
         },
       },
       id_menu: {
@@ -21,9 +22,10 @@ module.exports = {
         references: {
           model: "menu",
           key: "id_menu",
+          onDelete: "CASCADE",
         },
       },
-      harga: {
+      qty: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

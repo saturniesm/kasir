@@ -176,8 +176,6 @@ exports.updateStatusMeja = async (request, response) => {
   }
 };
 
-
-
 exports.getAvailableMeja = async (request, response) => {
   try {
     const availableMeja = await mejaModel.findAll({
