@@ -1,10 +1,10 @@
 ### INSERT TRANSAKSI --NOTE
 POST http://localhost:8080/transaksi/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIiLCJpYXQiOjE2Nzg1MjQ3OTEsImV4cCI6MTY4MDIwMzMxNjI0NX0.g-jbJqjXm8kuTlg9a0AlTXh03dAGSaDg5pwOaNi-WD0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
 Content-Type: application/json
 
 {
-    "id_meja": 4,
+    "id_meja": 3,
     "nama_pelanggan": "yanti",
     "detail_transaksi":[
         { 
@@ -39,9 +39,12 @@ Content-Type: application/json
 }
 
 ### BAYAR
-PUT  http://localhost:8080/transaksi/pay/20 HTTP/1.1
+PUT  http://localhost:8080/transaksi/pay/22 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
 
+### DELETE
+DELETE http://localhost:8080/transaksi/delete/21
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
 
 ### TRANSAKSI BY KASIR
 GET http://localhost:8080/transaksi/transaksi-kasir HTTP/1.1

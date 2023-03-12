@@ -12,6 +12,12 @@ app.get(
   transaksiController.getAllTransaksi
 );
 
+app.post(
+  "/add",
+  verify("admin", "kasir", "manager"),
+  transaksiController.createTransaksi
+);
+
 app.put(
   "/edit/:id_transaksi",
   verify("admin", "kasir", "manager"),
@@ -25,46 +31,11 @@ app.put(
 );
 
 app.delete(
-  "/:id",
+  "/delete/:id_transaksi",
   verify("admin", "kasir", "manager"),
   transaksiController.deleteTransaksi
 );
 
-app.get(
-  "/transaksi-kasir",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getTransaksiByKasir
-);
-
-app.get(
-  "/fav-menu",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getmostFavoriteProduct
-);
-
-app.get(
-  "/list-menu",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getListFavoriteProduct
-);
-
-app.get(
-  "/transaksi-harian",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getDailyTransaksi
-);
-
-app.get(
-  "/transaksi-bulanan",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getMonthlyTransaksi
-);
-
-app.get(
-  "/transaksi-tahunan",
-  verify("admin", "kasir", "manager"),
-  transaksiController.getYearlyTransaksi
-);
 
 
 module.exports = app;
