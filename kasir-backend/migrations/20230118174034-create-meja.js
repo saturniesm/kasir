@@ -10,10 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       nomor_meja: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        },
       },
       status: {
         type: Sequelize.ENUM("tersedia", "tidak_tersedia"),
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       createdAt: {
         allowNull: false,

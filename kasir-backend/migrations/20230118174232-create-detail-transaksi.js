@@ -27,6 +27,10 @@ module.exports = {
       },
       qty: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       createdAt: {
         allowNull: false,

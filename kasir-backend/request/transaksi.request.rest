@@ -1,6 +1,9 @@
+@host = http://localhost:8080/transaksi
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoxLCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg3NjE5OTcsImV4cCI6MTY4MDQ0MDc1OTYyMn0.qxyBz12lMciwixoIKXa0H8Zhd3hZOlJ4ON-yinmX9YI
+
 ### INSERT TRANSAKSI --NOTE
-POST http://localhost:8080/transaksi/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+POST {{host}}/add HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -19,8 +22,8 @@ Content-Type: application/json
 }
 
 ### EDIT TRANSAKSI
-PUT  http://localhost:8080/transaksi/edit/10 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIiLCJpYXQiOjE2Nzg1MjQ3OTEsImV4cCI6MTY4MDIwMzMxNjI0NX0.g-jbJqjXm8kuTlg9a0AlTXh03dAGSaDg5pwOaNi-WD0
+PUT  {{host}}/edit/10 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -39,26 +42,26 @@ Content-Type: application/json
 }
 
 ### BAYAR
-PUT  http://localhost:8080/transaksi/pay/22 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+PUT  {{host}}/pay/22 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### DELETE
-DELETE http://localhost:8080/transaksi/delete/21
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+DELETE {{host}}/delete/21
+Authorization: Bearer {{token}}
 
 ### TRANSAKSI BY KASIR
-GET http://localhost:8080/transaksi/transaksi-kasir HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+GET {{host}}/transaksi-kasir HTTP/1.1
+Authorization: Bearer {{token}}
 
 
 ### GET ALL TRANSAKSI
-GET http://localhost:8080/transaksi/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+GET {{host}}/get HTTP/1.1
+Authorization: Bearer {{token}}
 
-###
-GET http://localhost:8080/transaksi/list-menu HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+### GET LIST MENU
+GET {{host}}/list-menu HTTP/1.1
+Authorization: Bearer {{token}}
 
-###
-GET http://localhost:8080/transaksi/transaksi-harian HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoyLCJ1c2VybmFtZSI6ImFwYWphIiwiZW1haWwiOiJhcGFhamFAZXhhbXBsZS5jb20iLCJyb2xlIjoia2FzaXIifSwiaWF0IjoxNjc4NTQyNDU2LCJleHAiOjE2ODAyMjA5OTk0MTF9.xEA_jR1u4xlAELyrkJc0CGhk4kpxA326sJ0U0tGWV74
+### GET LIST MENU
+GET {{host}}/transaksi-harian HTTP/1.1
+Authorization: Bearer {{token}}

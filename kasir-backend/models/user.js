@@ -1,5 +1,13 @@
 "use strict";
 const { Model } = require("sequelize");
+
+/**
+ * User model for storing user data.
+ * @param {import('sequelize').Sequelize} sequelize - The Sequelize instance.
+ * @param {import('sequelize').DataTypes} DataTypes - The data types.
+ * @returns {typeof Model} - The User model.
+ */
+
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**

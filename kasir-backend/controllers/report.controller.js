@@ -7,7 +7,6 @@ const Op = require("sequelize").Op;
 const sequelize = require("../sequelize");
 
 
-
 exports.getTransaksiByKasir = async (request, response) => {
   try {
     const id_user = request.user.id_user;

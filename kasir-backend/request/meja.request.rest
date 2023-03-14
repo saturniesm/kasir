@@ -1,37 +1,40 @@
-# GET MEJA
-GET  http://localhost:8080/meja/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+@host = http://localhost:8080/meja
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjoxLCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg3NjE5OTcsImV4cCI6MTY4MDQ0MDc1OTYyMn0.qxyBz12lMciwixoIKXa0H8Zhd3hZOlJ4ON-yinmX9YI
+
+### GET MEJA
+GET  {{host}}/get HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### GET MEJA BY ID
-GET  http://localhost:8080/meja/get/5 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+GET  {{host}}/get/5 HTTP/1.1
+Authorization: Bearer {{token}}
 
 
 ### INSERT MEJA
-POST http://localhost:8080/meja/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+POST {{host}}/add HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nomor_meja":3,
+    "nomor_meja":23,
     "status":"tersedia"
 }
 
 
 ### EDIT MEJA ALL FIELDS
-PUT http://localhost:8080/meja/edit/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+PUT {{host}}/edit/2 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nomor_meja":5,
+    "nomor_meja":4,
     "status":"tersedia"
 }
 
 
 ### EDIT MEJA
-PUT http://localhost:8080/meja/edit/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+PUT {{host}}/edit/3 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -40,8 +43,8 @@ Content-Type: application/json
 }
 
 ### EDIT STATUS MEJA
-PUT http://localhost:8080/meja/edit-status/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+PUT {{host}}/edit-status/3 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -51,6 +54,6 @@ Content-Type: application/json
 
 
 ###DELETE MEJA BY NOMOR MEJA --NOTE
-DELETE  http://localhost:8080/meja/delete/2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+DELETE  {{host}}/delete/2 HTTP/1.1
+Authorization: Bearer {{token}}
 
