@@ -233,15 +233,29 @@ exports.updateEmail = async (request, response) => {
   const { email } = request.body;
   try {
     validateEmail(request, response, async () => {
-      const user = await userModel.findByPk(id_user);
+      const user = await userModel.findByPk(id_user, {
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt"],
+        },
+      });
       if (!user) {
         return response.status(404).json({ message: "User not found" });
       }
-      await user.update({ email });
+
+      const userInfo = {
+        id_user: user.id_user,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      };
+
+      const refresh_token = generateRefreshToken(userInfo);
+
+      await user.update({ email, refresh_token });
       return response.status(200).json({
         success: true,
         data: {
-          email: user.email,
+          user,
         },
         message: "Email updated successfully",
       });

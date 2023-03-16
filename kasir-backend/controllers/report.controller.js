@@ -6,12 +6,11 @@ const userModel = require("../models/index").user;
 const Op = require("sequelize").Op;
 const sequelize = require("../sequelize");
 
-
-
 exports.getTransaksiByKasir = async (request, response) => {
   try {
-    const id_user = request.user.id_user;
-    const username = request.user.username;
+    const id_user = request.params.id_user;
+
+    console.log(id_user);
 
     const getTransaksi = await transaksiModel.findAll({
       where: {
@@ -25,7 +24,7 @@ exports.getTransaksiByKasir = async (request, response) => {
     response.status(200).json({
       success: true,
       data: getTransaksi,
-      message: `Transaction from ${username} has been loaded.`,
+      message: `Transaction has been loaded.`,
     });
   } catch (error) {
     response.status(500).json({
@@ -106,85 +105,78 @@ exports.getListFavoriteProduct = async (request, response) => {
   }
 };
 
+exports.rangeDate = async (req, res) => {
+  const startDate = new Date(req.query.start);
+  const endDate = new Date(req.query.end);
 
-
-exports.getDailyTransaksi = async (request, response) => {
-  try {
-    const dailyTransactions = await transaksiModel.findAll({
-      where: {
-        tgl_transaksi: {
-          [Op.between]: [
-            sequelize.literal(`DATE_TRUNC('day', NOW())`),
-            sequelize.literal(
-              `DATE_TRUNC('day', NOW()) + INTERVAL '1 day' - INTERVAL '1 second'`
-            ),
-          ],
-        },
-      },
-    });
-
-    response.status(200).json({
-      success: true,
-      data: dailyTransactions,
-      message: `Daily transactions have been loaded.`,
-    });
-  } catch (error) {
-    response.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
+  if (!startDate || !endDate) {
+    return res.status(400).json({
+      status: "error",
+      message: "Please provide both start and end date.",
     });
   }
-};
 
-exports.getMonthlyTransaksi = async (request, response) => {
-  try {
-    const montlyTransactions = await transaksiModel.findAll({
-      where: {
-        tgl_transaksi: {
-          [Op.between]: [
-            sequelize.literal(`DATE_TRUNC('month', NOW())`),
-            sequelize.literal(
-              `DATE_TRUNC('month', NOW()) + INTERVAL '1 month' - INTERVAL '1 second'`
-            ),
-          ],
-        },
-      },
-    });
-
-    response.status(200).json({
-      success: true,
-      data: montlyTransactions,
-      message: `Monthly transactions have been loaded.`,
-    });
-  } catch (error) {
-    response.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
+  if (startDate > endDate) {
+    return res.status(400).json({
+      status: "error",
+      message: "Start date cannot be greater than end date.",
     });
   }
-};
 
-exports.getYearlyTransaksi = async (request, response) => {
   try {
     const transactions = await transaksiModel.findAll({
       where: {
         tgl_transaksi: {
-          [Op.between]: [
-            sequelize.literal(`DATE_TRUNC('year', NOW())`),
-            sequelize.literal(
-              `DATE_TRUNC('year', NOW()) + INTERVAL '1 year' - INTERVAL '1 second'`
-            ),
-          ],
+          [Op.between]: [startDate, endDate],
+        },
+      },
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Transactions retrieved successfully.",
+      data: transactions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getRevenue = async (request, response) => {
+  const startDate = new Date(request.query.start);
+  const endDate = new Date(request.query.end);
+
+  if (!startDate || !endDate) {
+    return response.status(400).json({
+      status: "error",
+      message: "Please provide both start and end date.",
+    });
+  }
+
+  if (startDate > endDate) {
+    return response.status(400).json({
+      status: "error",
+      message: "Start date cannot be greater than end date.",
+    });
+  }
+
+  try {
+    const totalRevenue = await transaksiModel.sum("total", {
+      where: {
+        tgl_transaksi: {
+          [Op.between]: [startDate, endDate],
         },
       },
     });
 
     response.status(200).json({
-      success: true,
-      data: transactions,
-      message: `Yearly transactions have been loaded.`,
+      status: "success",
+      data: totalRevenue,
+      message: "Total revenue retrieved successfully.",
     });
   } catch (error) {
     response.status(500).json({

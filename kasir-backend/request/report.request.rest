@@ -1,0 +1,33 @@
+@host = http://localhost:8080/report
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo3LCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoibWFuYWdlciJ9LCJpYXQiOjE2Nzg5MDE2MzYsImV4cCI6MTY4MDU4MDUzODY2Mn0.a2JFT5uploOeE1zuqOttW4lq3BQpfGVg-pR1vSJBbec
+
+
+### 
+GET {{host}}/transaksi-harian HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### 
+GET {{host}}/transaksi-kasir/2 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### 
+GET {{host}}/fav-menu HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+GET {{host}}/list-menu HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+GET {{host}}/transaksi-tanggal?start=2023-03-12 00:00:00&end=2023-03-12 23:59:59
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+GET {{host}}/pendapatan?start=2023-03-12 00:00:00&end=2023-03-12 23:59:59
+Authorization: Bearer {{token}}
+Content-Type: application/json

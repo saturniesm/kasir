@@ -1,53 +1,55 @@
-# GET USER
-GET  http://localhost:8080/user/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+@host = http://localhost:8080/user
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg5MDE0MzEsImV4cCI6MTY4MDU4MDMzMjcxOH0.rtGhL1Fv6M9osqwKLDHnEnKUQlPqk11kXW7RLC18kFw
 
-###
-GET  http://localhost:8080/user/get/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+### GET USER
+GET  {{host}}/get HTTP/1.1
+Authorization: Bearer {{token}}
+
+### GET BY ID
+GET  {{host}}/get/2 HTTP/1.1
+Authorization: Bearer {{token}}
 
 
 ### INSERT USER
-POST http://localhost:8080/user/add HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+POST {{host}}/add HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nama_user": "coba", 
-    "role": "default",
-    "username": "apaja", 
-    "email": "apaaja@example.com", 
+    "nama_user": "vigo", 
+    "role": "kasir",
+    "username": "vigo", 
+    "email": "vigo@gmail.com", 
     "password": "Password123#", 
     "confPassword": "Password123#"
 }
 
 ### FIND USER BY KEYWORD
-GET http://localhost:8080/user/search-user?q=@example.com HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+GET {{host}}/search-user?q=@example.com HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### EDIT USER
-PUT http://localhost:8080/user/edit/2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+PUT {{host}}/edit/10 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nama_user": "saturniesm",
-    "role": "admin",
-    "username": "bersamas",
-    "email": "bersamas@gmail.com"
+    "nama_user": "vigos",
+    "role": "kasir",
+    "username": "vigos",
+    "email": "vigookta@gmail.com"
 }
 
 ### EDIT USER ROLE
-PUT http://localhost:8080/user/update-role/7 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
+PUT {{host}}/update-role/11 HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "role": "kasir"
+    "role": "admin"
 }
 
 
 ###DELETE USER
-DELETE  http://localhost:8080/user/delete/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MDUyMDQsImV4cCI6MTY4MDE4MzcxMDA2NH0.xpcsqthxPG_hDw3NctWemz0OcwYUT_ndbLrS8S22inQ
-
+DELETE  {{host}}/delete/10 HTTP/1.1
+Authorization: Bearer {{token}}

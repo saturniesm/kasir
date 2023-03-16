@@ -1,20 +1,24 @@
-# GET MENU
-GET  http://localhost:8080/menu/get HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
+
+@host = http://localhost:8080/menu
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg5MDE0MzEsImV4cCI6MTY4MDU4MDMzMjcxOH0.rtGhL1Fv6M9osqwKLDHnEnKUQlPqk11kXW7RLC18kFw
+
+
+### GET MENU
+GET  {{host}}/get HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### GET MENU BY ID
-GET  http://localhost:8080/menu/get/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
+GET  {{host}}/get/4 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### FIND MENU BY KEYWORD 
-GET http://localhost:8080/menu/nama-menu?q=ikan HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
+GET {{host}}/nama-menu?q=ikan HTTP/1.1
+Authorization: Bearer {{token}}
 
 ### FIND MENU BY JENIS
-GET http://localhost:8080/menu/jenis-menu/makanan HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
+GET {{host}}/jenis-menu/makanan HTTP/1.1
+Authorization: Bearer {{token}}
 
 ###DELETE MENU --NOTE
-DELETE  http://localhost:8080/menu/delete/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJ1c2VybmFtZSI6IlN5ZWxhIiwiZW1haWwiOiJzeWVsYUBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg1MjEwMzgsImV4cCI6MTY4MDE5OTU1OTg1MH0.xFcixalkEZQdRextFrcIACc99hXOZv2nJMtbH1DP0qk
-
+DELETE  {{host}}/delete/4 HTTP/1.1
+Authorization: Bearer {{token}}

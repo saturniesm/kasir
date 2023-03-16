@@ -10,13 +10,13 @@ const verify = require("../middleware/verify");
 
 app.get(
   "/get",
-  verify.verifyRole("admin", "manager"),
+  verify.verifyRole("admin"),
   userController.getAllUser
 );
 
 app.get(
   "/get/:id_user",
-  verify.verifyRole("admin", "manager"),
+  verify.verifyRole("admin"),
   userController.getOneUser
 );
 
