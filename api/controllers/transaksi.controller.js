@@ -130,7 +130,6 @@ exports.updateTransaksi = async (request, response) => {
 
       response.status(201).json({
         success: true,
-        data: transaksi,
         message: "Transaksi has been updated",
       });
     });

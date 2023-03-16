@@ -1,0 +1,56 @@
+@host = http://localhost:8080/transaksi
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo3LCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoibWFuYWdlciJ9LCJpYXQiOjE2Nzg5MDE2MzYsImV4cCI6MTY4MDU4MDUzODY2Mn0.a2JFT5uploOeE1zuqOttW4lq3BQpfGVg-pR1vSJBbec
+
+### GET ALL TRANSAKSI
+GET {{host}}/get HTTP/1.1
+Authorization: Bearer {{token}}
+
+### INSERT TRANSAKSI --NOTE
+POST {{host}}/add HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id_meja": 4,
+    "nama_pelanggan": "yanti",
+    "detail_transaksi":[
+        { 
+            "id_menu": "2",
+            "qty" : 3
+        },
+        { 
+            "id_menu": "2",
+            "qty" : 10
+        }
+    ]
+}
+
+### EDIT TRANSAKSI
+PUT  {{host}}/edit/25 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id_meja": 4,
+    "nama_pelanggan": "yanti",
+    "detail_transaksi":[
+        { 
+            "id_menu": "2",
+            "qty" : 5
+        },
+        { 
+            "id_menu": "2",
+            "qty" : 10
+        }
+    ]
+}
+
+### BAYAR
+PUT  {{host}}/pay/28 HTTP/1.1
+Authorization: Bearer {{token}}
+
+### DELETE
+DELETE {{host}}/delete/21
+Authorization: Bearer {{token}}
+
+

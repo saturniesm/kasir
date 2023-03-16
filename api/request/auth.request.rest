@@ -1,9 +1,5 @@
 @host = http://localhost:8080/auth
 
-### Register
-POST {{host}}/registrasi HTTP/1.1
-@host = http://localhost:8080/auth
-
 ### Register 
 POST {{host}}/registrasi HTTP/1.1 
 Content-Type: application/json
@@ -14,34 +10,26 @@ Content-Type: application/json
     "email": "manager@example.com", 
     "password": "Password123#", 
     "confPassword": "Password123#"
-"nama_user": "syela1", "username": "syela1", "email": "syela1@example.com", "password": "Password123#", "confPassword": "Password123#"
 }
 
 ### Login 
 POST {{host}}/login HTTP/1.1
-POST {{host}}/login HTTP/1.1 
 Content-Type: application/json
 
 {
     "email": "admin@example.com", 
     "password": "Password123#"
-"email": "manager@example.com", "password": "Password123#"
 }
 
-### Logout
-DELETE {{host}}/logout HTTP/1.1
 ### Logout 
 DELETE {{host}}/logout HTTP/1.1 
 Content-Type: application/json
 
-### Refresh Token
-GET {{host}}/token HTTP/1.1
+
 ### Refresh Token 
 GET {{host}}/token HTTP/1.1 
 Content-Type: application/json
 
-### Ganti Email
-POST {{host}}/reset-email/2 HTTP/1.1
 ### Ganti Email 
 POST {{host}}/reset-email/9 HTTP/1.1 
 Content-Type: application/json
@@ -50,12 +38,11 @@ Content-Type: application/json
 "email": "syela@example.com"
 }
 
-### Ganti password
-POST {{host}}/reset-password/7 HTTP/1.1
+
 ### Ganti password 
 POST {{host}}/reset-password/7 HTTP/1.1 
 Content-Type: application/json
 
 {
-"password_lama": "Password123#d", "password_baru": "Password123#"
+"password_lama": "Password123#", "password_baru": "Password123#"
 }

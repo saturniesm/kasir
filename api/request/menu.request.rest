@@ -8,7 +8,7 @@ GET  {{host}}/get HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### GET MENU BY ID
-GET  {{host}}/get/4 HTTP/1.1
+GET  {{host}}/get/1 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### FIND MENU BY KEYWORD 
@@ -16,14 +16,9 @@ GET {{host}}/nama-menu?q=ikan HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### FIND MENU BY JENIS
-GET {{host}}/jenis-menu/makanan HTTP/1.1
-Authorization: Bearer {{token}}
-GET {{host}}/jenis-menu/makanan HTTP/1.1
+GET {{host}}/jenis-menu/minuman HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###DELETE MENU --NOTE
 DELETE  {{host}}/delete/3 HTTP/1.1
-Authorization: Bearer {{token}}
-
-DELETE  {{host}}/delete/4 HTTP/1.1
 Authorization: Bearer {{token}}

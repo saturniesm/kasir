@@ -1,10 +1,10 @@
 
 @host = http://localhost:8080/user
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg5MDE0MzEsImV4cCI6MTY4MDU4MDMzMjcxOH0.rtGhL1Fv6M9osqwKLDHnEnKUQlPqk11kXW7RLC18kFw
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg5Mzk4MjMsImV4cCI6MTY4MDYxODc2MzUzM30.fF4OUOaKb-5-p6HMpAd_5hqF25YuHq7ADJgNnf_aF8c
 
 
 ### Token manager
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo3LCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoibWFuYWdlciJ9LCJpYXQiOjE2Nzg5MDE2MzYsImV4cCI6MTY4MDU4MDUzODY2Mn0.a2JFT5uploOeE1zuqOttW4lq3BQpfGVg-pR1vSJBbec
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo3LCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoibWFuYWdlciJ9LCJpYXQiOjE2Nzg5MDE2MzYsImV4cCI6MTY4MDU4MDUzODY2Mn0.a2JFT5uploOeE1zuqOttW4lq3BQpfGVg-pR1vSJBbec
 
 ### GET USER
 GET  {{host}}/get HTTP/1.1
@@ -39,10 +39,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nama_user": "vigos",
+    "nama_user": "hehe",
     "role": "kasir",
-    "username": "vigos",
-    "email": "vigookta@gmail.com"
+    "username": "hehe",
+    "email": "hehe@gmail.com"
 }
 
 ### EDIT USER ROLE
