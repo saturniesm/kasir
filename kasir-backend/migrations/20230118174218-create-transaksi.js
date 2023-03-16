@@ -11,6 +11,10 @@ module.exports = {
       },
       tgl_transaksi: {
         type: Sequelize.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       id_user: {
         type: Sequelize.INTEGER,
@@ -31,9 +35,17 @@ module.exports = {
       },
       nama_pelanggan: {
         type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       status: {
         type: Sequelize.ENUM("belum_bayar", "lunas"),
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       total: {
         type: Sequelize.INTEGER,

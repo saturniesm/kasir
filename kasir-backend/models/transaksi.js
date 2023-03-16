@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       tgl_transaksi: DataTypes.DATE,
       id_user: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "user",
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       id_meja: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "meja",

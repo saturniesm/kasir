@@ -27,10 +27,12 @@ module.exports = {
       },
       role: {
         type: Sequelize.ENUM("admin", "kasir", "manager", "default"),
+        allowNull: false,
       },
       username: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           notEmpty: true,
           len: [3, 100],
@@ -39,6 +41,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           notEmpty: true,
           isEmail: true,

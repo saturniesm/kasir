@@ -18,7 +18,12 @@ Authorization: Bearer {{token}}
 ### FIND MENU BY JENIS
 GET {{host}}/jenis-menu/makanan HTTP/1.1
 Authorization: Bearer {{token}}
+GET {{host}}/jenis-menu/makanan HTTP/1.1
+Authorization: Bearer {{token}}
 
 ###DELETE MENU --NOTE
+DELETE  {{host}}/delete/3 HTTP/1.1
+Authorization: Bearer {{token}}
+
 DELETE  {{host}}/delete/4 HTTP/1.1
 Authorization: Bearer {{token}}

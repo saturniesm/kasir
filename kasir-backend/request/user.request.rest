@@ -1,12 +1,17 @@
+
 @host = http://localhost:8080/user
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo1LCJ1c2VybmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2Nzg5MDE0MzEsImV4cCI6MTY4MDU4MDMzMjcxOH0.rtGhL1Fv6M9osqwKLDHnEnKUQlPqk11kXW7RLC18kFw
+
+
+### Token manager
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJpZF91c2VyIjo3LCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJlbWFpbCI6Im1hbmFnZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoibWFuYWdlciJ9LCJpYXQiOjE2Nzg5MDE2MzYsImV4cCI6MTY4MDU4MDUzODY2Mn0.a2JFT5uploOeE1zuqOttW4lq3BQpfGVg-pR1vSJBbec
 
 ### GET USER
 GET  {{host}}/get HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### GET BY ID
-GET  {{host}}/get/2 HTTP/1.1
+GET  {{host}}/get/4 HTTP/1.1
 Authorization: Bearer {{token}}
 
 
@@ -16,10 +21,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "nama_user": "vigo", 
+    "nama_user": "bersamasama", 
     "role": "kasir",
-    "username": "vigo", 
-    "email": "vigo@gmail.com", 
+    "username": "bersamasama", 
+    "email": "bersamasama@gmail.com", 
     "password": "Password123#", 
     "confPassword": "Password123#"
 }
@@ -29,7 +34,7 @@ GET {{host}}/search-user?q=@example.com HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### EDIT USER
-PUT {{host}}/edit/10 HTTP/1.1
+PUT {{host}}/edit/2 HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -41,15 +46,16 @@ Content-Type: application/json
 }
 
 ### EDIT USER ROLE
-PUT {{host}}/update-role/11 HTTP/1.1
+PUT {{host}}/update-role/7 HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "role": "admin"
+    "role": "manager"
 }
 
 
 ###DELETE USER
-DELETE  {{host}}/delete/10 HTTP/1.1
+DELETE  {{host}}/delete/12 HTTP/1.1
 Authorization: Bearer {{token}}
+

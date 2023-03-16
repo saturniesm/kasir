@@ -16,9 +16,12 @@ Authorization: Bearer {{token}}
 ### INSERT MEJA
 POST {{host}}/add HTTP/1.1
 Authorization: Bearer {{token}}
+POST {{host}}/add HTTP/1.1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
+    "nomor_meja":23,
     "nomor_meja":23,
     "status":"tersedia"
 }
@@ -31,11 +34,14 @@ Content-Type: application/json
 
 {
     "nomor_meja":4,
+    "nomor_meja":4,
     "status":"tersedia"
 }
 
 
 ### EDIT MEJA
+PUT {{host}}/edit/3 HTTP/1.1
+Authorization: Bearer {{token}}
 PUT {{host}}/edit/3 HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -46,6 +52,8 @@ Content-Type: application/json
 }
 
 ### EDIT STATUS MEJA
+PUT {{host}}/edit-status/3 HTTP/1.1
+Authorization: Bearer {{token}}
 PUT {{host}}/edit-status/3 HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json

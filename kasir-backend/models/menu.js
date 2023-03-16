@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+       // Define a one-to-many association with the `detail_transaksi` model
       this.hasMany(models.detail_transaksi, {
         foreignKey: "id_menu",
         as: "detail_transaksi",
@@ -21,8 +22,18 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      nama_menu: DataTypes.STRING,
-      jenis: DataTypes.STRING,
+      nama_menu: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          len: [1, 100] // Maximum length of 100 characters
+        }
+      },
+      jenis: {
+        type: DataTypes.ENUM("makanan", "minuman"),
+        allowNull: false
+      },
       deskripsi: DataTypes.TEXT,
       gambar: DataTypes.STRING,
       harga: DataTypes.INTEGER,

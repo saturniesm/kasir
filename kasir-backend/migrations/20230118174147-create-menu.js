@@ -11,18 +11,38 @@ module.exports = {
       },
       nama_menu: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        }
       },
       jenis: {
         type: Sequelize.ENUM("makanan", "minuman"),
+        validate: {
+          notEmpty: true,
+        }
       },
       deskripsi: {
         type: Sequelize.TEXT,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       gambar: {
         type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       harga: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        }
       },
       createdAt: {
         allowNull: false,
